@@ -14,6 +14,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<CameraController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LevelController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<GridController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<InputController>().AsSingle().NonLazy();
         }
     }
 }

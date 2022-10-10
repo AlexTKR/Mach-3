@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3170097172634188809}
   - component: {fileID: 5472470308121351671}
+  - component: {fileID: 4468975789642265230}
   m_Layer: 0
   m_Name: Cell
   m_TagString: Untagged
@@ -46,6 +47,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 3210771607458185757}
+  _idleColor: {r: 1, g: 1, b: 1, a: 1}
+  _selectedColor: {r: 0.40784314, g: 0.39215687, b: 0.39215687, a: 1}
+--- !u!65 &4468975789642265230
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3616049829973398294}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7128993052153597824
 GameObject:
   m_ObjectHideFlags: 0

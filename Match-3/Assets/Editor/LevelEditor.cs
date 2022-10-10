@@ -34,7 +34,7 @@ namespace Editor
             }
 
 
-            if (_target.currentLevelInstance.CellTypes is null)
+            if (_target.currentLevelInstance == null || _target.currentLevelInstance.CellTypes == null)
             {
                 EditorGUILayout.LabelField("Press select current level to continue");
                 return;

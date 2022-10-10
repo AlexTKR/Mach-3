@@ -46,7 +46,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a292bddf8693e00428dace4a7f770aa6, type: 3}
   m_PackedSpriteNamesToIndex:
   - Blue
-  - Greed
+  - Green
   - Purple
   - Red
   - orange

@@ -16,7 +16,7 @@ namespace Level
         Purple,
         Green
     }
-
+    
     [Serializable]
     public class RowData
     {

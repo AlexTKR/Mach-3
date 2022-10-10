@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UtilitiesAndHelpers;
 
 namespace Level
 {
@@ -10,23 +11,23 @@ namespace Level
 
         public CellType[,] CellTypes
         {
-            get =>  LevelData?.Count is 0 ? null : GetCells();
+            get => LevelData?.Count is 0 ? null : GetCells();
             set => SetCells(value);
         }
 
         private CellType[,] GetCells()
         {
-            var rows = LevelData.Count;
-            var columns = LevelData[0].Cells.Count;
-            CellType[,] cells = new CellType[rows, columns];
+            var columns = LevelData.Count;
+            var rows  = LevelData[0].Cells.Count;
+            var cells = new CellType[rows, columns];
             LevelData.Sort((current, next) => current.Index.CompareTo(next.Index));
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < columns; i++)
             {
                 var currentCells = LevelData[i].Cells;
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < rows; j++)
                 {
-                    cells[i, j] = currentCells[j];
+                    cells[j, i] = currentCells[j];
                 }
             }
 
@@ -37,18 +38,18 @@ namespace Level
         {
             LevelData = new List<RowData>();
 
-            int rows = cells.GetUpperBound(0) + 1; 
+            int rows = cells.GetUpperBound(0) + 1;
             int columns = cells.GetUpperBound(1) + 1;
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < columns; i++)
             {
                 var temp = new List<CellType>();
 
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < rows; j++)
                 {
-                    temp.Add(cells[i, j]);
+                    temp.Add(cells[j, i]);
                 }
-                
+
                 LevelData.Add(new RowData(temp, i));
             }
         }
