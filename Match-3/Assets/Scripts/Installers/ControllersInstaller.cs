@@ -8,8 +8,9 @@ namespace Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<Initer>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<Initer>().AsSingle().NonLazy();
 
+            Container.BindInterfacesAndSelfTo<GameController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<BundleController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<CameraController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LevelController>().AsSingle().NonLazy();

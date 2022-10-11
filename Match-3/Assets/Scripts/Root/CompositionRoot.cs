@@ -1,22 +1,27 @@
 using Composition;
+using Controllers;
 using UnityEngine;
+using UtilitiesAndHelpers;
 using Zenject;
 
 namespace Root
 {
      public class CompositionRoot : MonoBehaviour
      {
-          private Initer _initer;
+          private IInitBehaviour _initer;
+          private ILoadGameSettings _loadGameSettings;
 
           [Inject]
-          private void Construct(Initer initer)
+          private void Construct(IInitBehaviour initer, ILoadGameSettings loadGameSettings)
           {
                _initer = initer;
+               _loadGameSettings = loadGameSettings;
           }
 
           private void Start()
           {
-              _initer.Init();
+               _loadGameSettings.LoadGameSettings();
+               _initer.Init();
           }
      }
 }

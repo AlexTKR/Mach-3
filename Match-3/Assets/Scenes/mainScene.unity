@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0346363921079d4489001d9482c13ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dimensions: {x: 4, y: 4}
+  Dimensions: {x: 3, y: 3}
   currentLevelInstance: {fileID: 11400000, guid: a846584e7bf32f741a6ba21a26be4378, type: 2}
 --- !u!4 &49051752
 Transform:

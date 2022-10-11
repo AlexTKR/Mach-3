@@ -1,4 +1,5 @@
 using Level;
+using Settings;
 using UnityEngine;
 using UnityEngine.U2D;
 using View;
@@ -15,11 +16,17 @@ namespace Controllers
         CellView GetCellPrefab();
     }
 
-    public class BundleController: IGetLevel, IGetCellAtlas, IGetCell
+    public interface iGetGameSettings
+    {
+        GameSettings GetGameSettings();
+    }
+
+    public class BundleController: IGetLevel, IGetCellAtlas, IGetCell, iGetGameSettings
     {
         private IGetLevel _getLevel;
         private SpriteAtlas _spriteAtlas;
         private CellView _cellView;
+        private GameSettings _gameSettings;
         
         public CellType[,] GetLevel(int number)
         {
@@ -36,6 +43,11 @@ namespace Controllers
         public CellView GetCellPrefab()
         {
             return _cellView ??= Resources.Load<CellView>("Cells/Cell");
+        }
+
+        public GameSettings GetGameSettings()
+        {
+            return _gameSettings??= Resources.Load<GameSettings>("Settings/GameSettings");
         }
     }
 }

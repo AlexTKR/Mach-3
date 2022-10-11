@@ -4,8 +4,13 @@ using UtilitiesAndHelpers;
 using Zenject;
 
 namespace Composition
-{ 
-    public class Initer
+{
+    public interface IInitBehaviour
+    {
+        void Init();
+    }
+
+    public class Initer : IInitBehaviour
     {
         private List<IInit> _initControllers;
         

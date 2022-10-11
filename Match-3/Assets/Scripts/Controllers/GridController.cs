@@ -109,7 +109,8 @@ namespace Controllers
         public void SetData(CellIndexInGrid indexInGrid, CellType cellType,
             Vector3 position, Sprite sprite, Action<ICell> onMatch);
 
-        public Task Shift(CellIndexInGrid indexInGrid, Vector3 position, Action<ICell> onFinish);
+        public Task Shift(CellIndexInGrid indexInGrid, Vector3 position,  Func<ICell, Task> onFinish,
+            bool onMatchShift = false);
     }
 
     public class Cell : ICell
@@ -139,11 +140,12 @@ namespace Controllers
                 : sprite, Id, position);
         }
 
-        public async Task Shift(CellIndexInGrid id, Vector3 position, Action<ICell> onFinish)
+        public async Task Shift(CellIndexInGrid id, Vector3 position, Func<ICell, Task> onFinish,
+            bool onMatchShift = false)
         {
             Id = id;
-            await _cellView.Shift(id, position);
-            onFinish?.Invoke(this);
+            await _cellView.Shift(id, position, onMatchShift);
+            await onFinish.Invoke(this);
         }
 
         public void Highlight(bool status)
@@ -155,7 +157,6 @@ namespace Controllers
         {
             _cellView.Match();
             _onMatch?.Invoke(this);
-            _onMatch = null;
         }
     }
 
@@ -299,10 +300,11 @@ namespace Controllers
             return true;
         }
 
-        private void ProcessCellShift(ICell cell)
+        private Task ProcessCellShift(ICell cell)
         {
             var cellId = cell.Id;
             _cells[cellId.RowIndex, cellId.ColumnIndex] = cell;
+            return Task.CompletedTask;
         }
 
         private void FindMatches(IList<CellIndexInGrid> cells)
@@ -321,8 +323,9 @@ namespace Controllers
                 return;
             }
 
-            Match(matches);
             var matchedIds = matches.Select(cell => cell.Id).ToList();
+            
+            Match(matches);
             ReFillCells(matchedIds);
         }
 
@@ -404,26 +407,27 @@ namespace Controllers
                     : _cells[currentMatchedCellId.RowIndex, currentMatchedCellId.ColumnIndex - 1];
                 var canShift = upwardsCell is { };
 
+                ICell shiftCell;
+
                 if (canShift)
                 {
                     sortedCells[0] = upwardsCell.Id;
-                    shiftTasks.Add(upwardsCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift
-                    ));
+                    shiftCell = upwardsCell;
                 }
                 else
                 {
                     var cell = SpawnRandomCell(currentMatchedCellId);
-                    shiftTasks.Add(cell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift));
+                    shiftCell = cell;
                     sortedCells.RemoveAt(0);
                 }
 
-                await Task.Yield();
+                shiftTasks.Add(
+                    shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift, true));
             }
 
             await Task.WhenAll(shiftTasks);
-
-            _swapTask = null;
-            //FindMatches(matchedIds);
+            await Task.Delay(TimeSpan.FromSeconds(2));
+            FindMatches(matchedIds);
         }
     }
 
@@ -496,7 +500,6 @@ namespace Controllers
                     var currentCellPos = new Vector3(currentXPos, currentYPos, 0f);
                     var currentCellType = cells[i, j];
                     var indexInGrid = (i, j);
-                    var cellId = indexInGrid.GetHashCode();
 
                     _gridInstance.RegisterCell(new CellIndexInGrid { RowIndex = i, ColumnIndex = j },
                         currentCellType, currentCellPos);
