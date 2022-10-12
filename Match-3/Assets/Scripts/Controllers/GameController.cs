@@ -8,12 +8,23 @@ namespace Controllers
         void LoadGameSettings();
     }
 
-    public class GameController : ControllerBase, ILoadGameSettings
+    public interface ISetLevelNumber
     {
-        private iGetGameSettings _getGameSettings;
+        public void SetLevelNumber(int number);
+    }
+
+    public interface ILevelData : ISetLevelNumber
+    {
+        LevelData GetCurrentLevelData();
+    }
+
+    public class GameController : ILoadGameSettings, ILevelData
+    {
+        private IGetGameSettings _getGameSettings;
+        private int _currentLevelNumber;
         
         [Inject]
-        void Construct(iGetGameSettings getGameSettings)
+        void Construct(IGetGameSettings getGameSettings)
         {
             _getGameSettings = getGameSettings;
         }
@@ -21,6 +32,16 @@ namespace Controllers
         public void LoadGameSettings()
         {
             SharedData.GameSettings = _getGameSettings.GetGameSettings();
+        }
+
+        public LevelData GetCurrentLevelData()
+        {
+            return null;
+        }
+
+        public void SetLevelNumber(int number)
+        {
+            _currentLevelNumber = number;
         }
     }
 }

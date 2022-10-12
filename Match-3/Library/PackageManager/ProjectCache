@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637974495676046112
-    m_Hash: 1071124706
+      ticks: 638011165510016996
+    m_Hash: 2714403856
   m_LockFileStatus:
     m_FilePath: C:/Projects/Self/Match-3/Match-3/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637974496217212864
-    m_Hash: 2593603777
+      ticks: 638011165510086985
+    m_Hash: 3877609403
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -22,6 +22,57 @@ m_LocalPackages:
 m_ProjectPath: C:/Projects/Self/Match-3/Match-3/Packages
 m_EditorVersion: 2021.3.8f1 (b30333d56e81)
 m_ResolvedPackages:
+- packageId: com.unity.2d.sprite@1.0.0
+  testable: 0
+  isDirectDependency: 1
+  version: 1.0.0
+  source: 2
+  resolvedPath: C:\Projects\Self\Match-3\Match-3\Library\PackageCache\com.unity.2d.sprite@1.0.0
+  assetPath: Packages/com.unity.2d.sprite
+  name: com.unity.2d.sprite
+  displayName: 2D Sprite
+  author:
+    name: 
+    email: 
+    url: 
+  category: 2D
+  type: 
+  description: Use Unity Sprite Editor Window to create and edit Sprite asset properties
+    like pivot, borders and Physics shape
+  status: 4
+  errors: []
+  versions:
+    all:
+    - 1.0.0
+    compatible:
+    - 1.0.0
+    verified: 1.0.0
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - 2d
+  - sprite
+  - sprite editor window
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 0
+  documentationUrl: 
+  hasRepository: 0
+  repository:
+    type: 
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 1.0.0
+    nextVersion: 
 - packageId: com.unity.collab-proxy@1.17.1
   testable: 0
   isDirectDependency: 1
@@ -95,6 +146,7 @@ m_ResolvedPackages:
     - 1.17.0
     - 1.17.1
     - 1.17.2
+    - 1.17.6
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -108,6 +160,7 @@ m_ResolvedPackages:
     compatible:
     - 1.17.1
     - 1.17.2
+    - 1.17.6
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -118,7 +171,7 @@ m_ResolvedPackages:
     - 2.1.0-preview.3
     - 2.1.0-preview.5
     - 2.1.0-preview.6
-    verified: 1.17.2
+    verified: 1.17.6
   dependencies:
   - name: com.unity.services.core
     version: 1.0.1
@@ -975,7 +1028,22 @@ m_ResolvedPackages:
   errors: []
   versions:
     all:
+    - 1.5.0
+    - 1.5.1-pre.3
+    - 1.5.1-pre.5
+    - 1.5.1
+    - 1.5.2
+    - 1.6.0-pre.3
+    - 1.6.0
+    - 1.6.1
+    - 1.7.1
+    - 1.7.2
+    - 1.7.3
+    - 1.7.5
+    - 1.7.6
+    - 1.7.7
     - 1.7.8
+    - 1.8.0-pre.1
     compatible:
     - 1.7.8
     verified: 1.7.8
@@ -1003,7 +1071,7 @@ m_ResolvedPackages:
     capabilities: 7
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637878097330000000
   documentationUrl: 
   hasRepository: 1
   repository:
@@ -2983,6 +3051,7 @@ m_ResolvedPackages:
     - 1.2.0-exp.5
     - 1.2.0-exp.6
     - 1.2.0-exp.7
+    - 1.2.0
     compatible:
     - 1.0.1
     - 1.1.0
@@ -2994,6 +3063,7 @@ m_ResolvedPackages:
     - 1.2.0-exp.5
     - 1.2.0-exp.6
     - 1.2.0-exp.7
+    - 1.2.0
     verified: 1.0.1
   dependencies:
   - name: com.unity.test-framework
@@ -3060,10 +3130,25 @@ m_ResolvedPackages:
   errors: []
   versions:
     all:
+    - 1.0.1
+    - 1.1.0-pre.7
+    - 1.1.0-pre.8
+    - 1.1.0-pre.9
+    - 1.1.0-pre.10
+    - 1.1.0-pre.11
+    - 1.1.0-pre.41
+    - 1.1.0-pre.69
+    - 1.2.0
+    - 1.3.1
+    - 1.3.2
+    - 1.4.0
+    - 1.4.1
     - 1.4.2
+    - 1.4.3
     compatible:
     - 1.4.2
-    verified: 1.4.2
+    - 1.4.3
+    verified: 1.4.3
   dependencies:
   - name: com.unity.modules.unitywebrequest
     version: 1.0.0
@@ -3088,7 +3173,7 @@ m_ResolvedPackages:
     capabilities: 7
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637919618520000000
   documentationUrl: 
   hasRepository: 1
   repository:
@@ -3185,6 +3270,18 @@ m_ResolvedPackages:
   errors: []
   versions:
     all:
+    - 1.0.0-preview.2
+    - 1.0.0-preview.3
+    - 1.0.0-preview.4
+    - 1.0.1-preview.1
+    - 1.1.2
+    - 2.0.0-preview
+    - 2.0.0-preview.1
+    - 2.0.0-preview.2
+    - 2.0.0
+    - 2.0.1-preview.1
+    - 2.0.2
+    - 3.0.1
     - 3.0.2
     compatible:
     - 3.0.2
@@ -3201,7 +3298,7 @@ m_ResolvedPackages:
     capabilities: 7
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637846828220000000
   documentationUrl: 
   hasRepository: 1
   repository:

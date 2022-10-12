@@ -16,18 +16,24 @@ namespace Controllers
         CellView GetCellPrefab();
     }
 
-    public interface iGetGameSettings
+    public interface IGetGameSettings
     {
         GameSettings GetGameSettings();
     }
 
-    public class BundleController: IGetLevel, IGetCellAtlas, IGetCell, iGetGameSettings
+    public interface IGetLevelSettings
+    {
+        IGetLevelData GetLevelSettings();
+    }
+
+    public class BundleController : IGetLevel, IGetCellAtlas, IGetCell, IGetGameSettings, IGetLevelSettings
     {
         private IGetLevel _getLevel;
         private SpriteAtlas _spriteAtlas;
         private CellView _cellView;
         private GameSettings _gameSettings;
-        
+        private IGetLevelData _levelSettings;
+
         public CellType[,] GetLevel(int number)
         {
             _getLevel ??= Resources.Load<LevelHolder>("Level/LevelHolder");
@@ -37,7 +43,8 @@ namespace Controllers
 
         public SpriteAtlas GetCellAtlas()
         {
-            return  _spriteAtlas ??= Resources.Load<SpriteAtlas>("Atlases/CellAtlas");;
+            return _spriteAtlas ??= Resources.Load<SpriteAtlas>("Atlases/CellAtlas");
+            ;
         }
 
         public CellView GetCellPrefab()
@@ -47,7 +54,12 @@ namespace Controllers
 
         public GameSettings GetGameSettings()
         {
-            return _gameSettings??= Resources.Load<GameSettings>("Settings/GameSettings");
+            return _gameSettings ??= Resources.Load<GameSettings>("Settings/GameSettings");
+        }
+
+        public IGetLevelData GetLevelSettings()
+        {
+            return _levelSettings ??= Resources.Load<LevelSettings>("Settings/LevelSettings");
         }
     }
 }

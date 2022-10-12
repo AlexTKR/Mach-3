@@ -4,23 +4,7 @@ using Level;
 
 namespace UtilitiesAndHelpers
 {
-    #region Interfaces
-
-    public interface IInit
-    {
-        Task Initialize();
-    }
-
-    public interface IInitControllers : IInit
-    {
-    }
-
-    public interface IInitView : IInit
-    {
-    }
-
-    #endregion
-
+    
     public enum Directions
     {
         Up,

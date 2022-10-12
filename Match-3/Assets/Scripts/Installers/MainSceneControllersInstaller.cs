@@ -4,14 +4,21 @@ using Zenject;
 
 namespace Installers
 {
-    public class ControllersInstaller : MonoInstaller
+    public abstract class ControllersInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<Initer>().AsSingle().NonLazy();
+            Install();
+        }
+        protected abstract void Install();
+    }
 
-            Container.BindInterfacesAndSelfTo<GameController>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<BundleController>().AsSingle().NonLazy();
+    public class MainSceneControllersInstaller : ControllersInstaller
+    {
+        protected override void Install()
+        {
+            Container.BindInterfacesAndSelfTo<MainSceneUIController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<CameraController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LevelController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<GridController>().AsSingle().NonLazy();

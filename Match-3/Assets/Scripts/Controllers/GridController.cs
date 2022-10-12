@@ -109,7 +109,7 @@ namespace Controllers
         public void SetData(CellIndexInGrid indexInGrid, CellType cellType,
             Vector3 position, Sprite sprite, Action<ICell> onMatch);
 
-        public Task Shift(CellIndexInGrid indexInGrid, Vector3 position,  Func<ICell, Task> onFinish,
+        public Task Shift(CellIndexInGrid indexInGrid, Vector3 position, Func<ICell, Task> onFinish,
             bool onMatchShift = false);
     }
 
@@ -163,8 +163,8 @@ namespace Controllers
     public interface IGrid
     {
         void SetData(float cellSize);
-        ICell RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position);
-        void SelectCell(CellIndexInGrid id);
+        void RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position);
+        Task<bool> SelectCell(CellIndexInGrid id);
     }
 
     public class GridInstance : IGrid
@@ -201,19 +201,16 @@ namespace Controllers
 
         public void SetData(float cellSize)
         {
-            var cellPosition = _cells[0, 0].CellPosition;
-            _spawnYPosition = cellPosition.Value.y + cellSize;
+            var cellPosition = _cellPositions[0, 0];
+            _spawnYPosition = cellPosition.y + cellSize;
         }
 
-        public ICell RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position)
+        public void RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position)
         {
-            var cell = SpawnCell(id, cellType, position);
+            var cell = cellType is CellType.Empty ? null : SpawnCell(id, cellType, position);
 
             _cells[id.RowIndex, id.ColumnIndex] = cell;
-            _cellPositions[id.RowIndex, id.ColumnIndex] =
-                cell.CellPosition ?? Vector3.zero;
-
-            return cell;
+            _cellPositions[id.RowIndex, id.ColumnIndex] = position;
         }
 
         private ICell SpawnRandomCell(CellIndexInGrid id)
@@ -240,22 +237,22 @@ namespace Controllers
             return _cellTypes[_random.Next(0, _cellTypes.Count)];
         }
 
-        public async void SelectCell(CellIndexInGrid id)
+        public async Task<bool> SelectCell(CellIndexInGrid id)
         {
             if (_swapTask is { })
-                return;
+                return false;
 
             if (_selectedCell is null)
             {
                 _selectedCell = _cells[id.RowIndex, id.ColumnIndex];
                 _selectedCell.Highlight(true);
-                return;
+                return false;
             }
 
             var selectedCellId = _selectedCell.Id;
 
             if (selectedCellId == id)
-                return;
+                return false;
 
 
             var currentCell = _cells[id.RowIndex, id.ColumnIndex];
@@ -265,13 +262,15 @@ namespace Controllers
             if (!_swapTask.Result)
             {
                 _swapTask = null;
-                return;
+                return false;
             }
 
             FindMatches(new List<CellIndexInGrid> { selectedCellId, currentCellId });
 
             _selectedCell.Highlight(false);
             _selectedCell = null;
+
+            return true;
         }
 
         private Task<bool> _swapTask;
@@ -307,14 +306,20 @@ namespace Controllers
             return Task.CompletedTask;
         }
 
-        private void FindMatches(IList<CellIndexInGrid> cells)
+        private async void FindMatches(IList<CellIndexInGrid> cells)
         {
-            var matches = new List<ICell>();
+            var matches = new List<CellIndexInGrid>();
 
             for (int i = 0; i < cells.Count; i++)
             {
                 var currentCellId = cells[i];
-                matches.AddRange(FindMatch(currentCellId));
+                if (_cells[currentCellId.RowIndex, currentCellId.ColumnIndex] is null)
+                    continue;
+
+                var matched = await FindMatch(currentCellId);
+                var matchedIds = matched.Select(cell => cell.Id).ToList();
+                matches.AddRange(matchedIds);
+                Match(matched);
             }
 
             if (matches.IsEmpty())
@@ -323,13 +328,10 @@ namespace Controllers
                 return;
             }
 
-            var matchedIds = matches.Select(cell => cell.Id).ToList();
-            
-            Match(matches);
-            ReFillCells(matchedIds);
+            ReFillCells(matches);
         }
 
-        private IList<ICell> FindMatch(CellIndexInGrid cellId)
+        private async Task<IList<ICell>> FindMatch(CellIndexInGrid cellId)
         {
             var cell = _cells[cellId.RowIndex, cellId.ColumnIndex];
             var matches = new List<ICell>();
@@ -340,8 +342,9 @@ namespace Controllers
             if (buffer.Count >= 2)
             {
                 matches.AddRange(buffer);
-                buffer.Clear();
             }
+
+            buffer.Clear();
 
             GetMatchingNeighbours(cell, Directions.Up, buffer);
             GetMatchingNeighbours(cell, Directions.Down, buffer);
@@ -354,6 +357,7 @@ namespace Controllers
             if (!matches.IsEmpty())
                 matches.Add(cell);
 
+            await Task.Yield();
             return matches;
         }
 
@@ -377,7 +381,8 @@ namespace Controllers
 
             var currentCell = _cells[currentCellId.Item1, currentCellId.Item2];
 
-            if (currentCell.CellType != previousCell.CellType)
+            if (currentCell is null ||
+                currentCell.CellType != previousCell.CellType)
                 return;
 
             matches.Add(currentCell);
@@ -396,6 +401,7 @@ namespace Controllers
         {
             var sortedCells = matchedIds.OrderBy(data => data).ToList();
             var shiftTasks = new List<Task>();
+            matchedIds.Clear();
 
             while (!sortedCells.IsEmpty())
             {
@@ -421,12 +427,12 @@ namespace Controllers
                     sortedCells.RemoveAt(0);
                 }
 
+                matchedIds.Add(currentMatchedCellId);
                 shiftTasks.Add(
                     shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift, true));
             }
 
             await Task.WhenAll(shiftTasks);
-            await Task.Delay(TimeSpan.FromSeconds(2));
             FindMatches(matchedIds);
         }
     }
@@ -434,7 +440,7 @@ namespace Controllers
     public class GridController : ControllerBase, IInitGrid, ISelectCell
     {
         private IGrid _gridInstance;
-        private IGetLevel _getLevel;
+        private IProcessMove _processMove;
         private MainCamera _mainCamera;
         private SpriteAtlas _cellSpriteAtlas;
         private CellView _cellPrefab;
@@ -442,13 +448,13 @@ namespace Controllers
         private Vector3 _screenBounds;
 
         [Inject]
-        void Construct(MainCamera mainCamera, IGetLevel getLevel, IGetCellAtlas getCellAtlas,
-            IGetCell getCell)
+        void Construct(MainCamera mainCamera, IGetCellAtlas getCellAtlas,
+            IGetCell getCell, IProcessMove processMove)
         {
-            _getLevel = getLevel;
             _mainCamera = mainCamera;
             _cellSpriteAtlas = getCellAtlas.GetCellAtlas();
             _cellPrefab = getCell.GetCellPrefab();
+            _processMove = processMove;
         }
 
         public override Task Initialize()
@@ -457,9 +463,6 @@ namespace Controllers
                 _mainCamera.Camera.transform.position.z));
             _playingAreaBounds =
                 new Vector3(Math.Abs(_screenBounds.x * 2), Math.Abs(_screenBounds.y * 2), _screenBounds.z);
-            var firstLevelCells = _getLevel.GetLevel(1);
-            GenerateGrid(firstLevelCells);
-
             return base.Initialize();
         }
 
@@ -499,7 +502,6 @@ namespace Controllers
                                       (approximateCellDimensions * ((middleYCell - (isYEven ? 1 : 0)) - j));
                     var currentCellPos = new Vector3(currentXPos, currentYPos, 0f);
                     var currentCellType = cells[i, j];
-                    var indexInGrid = (i, j);
 
                     _gridInstance.RegisterCell(new CellIndexInGrid { RowIndex = i, ColumnIndex = j },
                         currentCellType, currentCellPos);
@@ -509,9 +511,19 @@ namespace Controllers
             _gridInstance.SetData(approximateCellDimensions);
         }
 
-        public void SelectCell(CellIndexInGrid id)
+        private Task<bool> _selectTask;
+
+        public async void SelectCell(CellIndexInGrid id)
         {
-            _gridInstance.SelectCell(id);
+            if (_selectTask is { })
+                return;
+
+            _selectTask = _gridInstance.SelectCell(id);
+            await _selectTask;
+            if (_selectTask.Result)
+                _processMove.ProcessMove();
+
+            _selectTask = null;
         }
     }
 }

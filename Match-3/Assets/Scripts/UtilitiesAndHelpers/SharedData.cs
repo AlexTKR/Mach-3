@@ -15,5 +15,7 @@ namespace UtilitiesAndHelpers
         public static int MaxColumnSize = 8;
         public static int CurrentRowCount;
         public static int CurrentColumnCount;
+
+        public static float UIResizeSpeed = 0.4f;
     }
 }
