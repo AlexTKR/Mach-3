@@ -4,11 +4,10 @@ using Zenject;
 
 namespace Installers
 {
-    public class MapSceneControllersInstaller : MonoInstaller
+    public class MapSceneControllersInstaller : InstallersWithInitBase
     {
-        public override void InstallBindings()
+        protected override void Install()
         {
-            Container.BindInterfacesAndSelfTo<Initer>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<MapSceneUIController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<MapController>().AsSingle().NonLazy();
         }

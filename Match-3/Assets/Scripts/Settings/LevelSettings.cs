@@ -15,6 +15,6 @@ namespace Settings
     {
         [SerializeField] private List<LevelData> _levelData;
 
-        public List<LevelData> LevelData => LevelData.OrderBy(data => data.LevelNumber).ToList();
+        public List<LevelData> LevelData => _levelData.OrderBy(data => data.LevelNumber).ToList();
     }
 }

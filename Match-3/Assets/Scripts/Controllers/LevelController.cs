@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Level;
-using UnityEngine;
-using UnityEngine.U2D;
-using UtilitiesAndHelpers;
-using View;
 using Zenject;
 
 namespace Controllers
@@ -25,9 +21,9 @@ namespace Controllers
         public List<LevelGoal> LevelGoals;
     }
 
-    public interface ILoadLevel
+    public interface ILoadLevel<T>
     {
-        void LoadLevel(LevelData levelData);
+        void LoadLevel(T level);
     }
 
     public interface IProcessMove
@@ -50,15 +46,20 @@ namespace Controllers
 
     public class LevelInstance : ILevelInstance
     {
+        private IMovesCounter _movesCounter;
+        private IGoalBehaviour _goalBehaviour;
         private Dictionary<CellType, int> _goals = new();
-        private Action _onGoalAccomplished;
+        private Action<int> _onGoalAccomplished;
         private Action _onMovesEnd;
 
         private int _levelNumber;
         private int _movesCount;
 
-        public LevelInstance(LevelData levelData, Action onGoalAccomplished, Action onMovesEnd)
+        public LevelInstance(LevelData levelData, Action<int> onGoalAccomplished,
+            Action onMovesEnd, IMovesCounter movesCounter, IGoalBehaviour goalBehaviour)
         {
+            _movesCounter = movesCounter;
+            _goalBehaviour = goalBehaviour;
             _onGoalAccomplished += onGoalAccomplished;
             _onMovesEnd += onMovesEnd;
 
@@ -79,47 +80,67 @@ namespace Controllers
                 return;
 
             _goals[cellType]--;
+            _goalBehaviour.ProcessGoal(cellType, _goals[cellType]);
 
             if (_goals[cellType] <= 0)
                 _goals.Remove(cellType);
 
             if (_goals.Count == 0)
-                _onGoalAccomplished?.Invoke();
+                _onGoalAccomplished?.Invoke(_levelNumber);
         }
 
         public void ProcessMove()
         {
             if (--_movesCount <= 0)
                 _onMovesEnd?.Invoke();
+
+            _movesCounter.SetMovesCount(_movesCount);
         }
     }
 
-    public class LevelController : ControllerBase, ILoadLevel, ILevelController
+    public class LevelController : ControllerBase, ILoadLevel<LevelData>, ILevelController
     {
         private IGetLevel _getLevel;
         private IInitGrid _initGrid;
         private ILevelInstance _levelInstance;
+        private IGetLevelSettings _getLevelSettings;
+        private IUpperPanelBehaviour _upperPanelBehaviour;
+        private ILoosePanel _loosePanel;
+        private IWinPanel _winPanel;
+        private ISetLastCompletedLevelNumber _setLastCompletedLevelNumber;
 
         [Inject]
-        void Construct(IGetLevel getLevel)
+        void Construct(IGetLevel getLevel, IInitGrid initGrid,
+            IGetLevelSettings getLevelSettings, IUpperPanelBehaviour upperPanelBehaviour,
+            ILoosePanel loosePanel, IWinPanel winPanel, 
+            ISetLastCompletedLevelNumber setLastCompletedLevelNumber)
         {
             _getLevel = getLevel;
-        }
-
-        public override void Tick()
-        {
+            _initGrid = initGrid;
+            _loosePanel = loosePanel;
+            _winPanel = winPanel;
+            _getLevelSettings = getLevelSettings;
+            _upperPanelBehaviour = upperPanelBehaviour;
+            _setLastCompletedLevelNumber = setLastCompletedLevelNumber;
         }
 
         public void LoadLevel(LevelData levelData)
         {
-            // var cells = _getLevel.GetLevel(levelData.LevelNumber);
-            //
-            // if (cells is null)
-            //     return;
-            //
-            // _levelInstance = new LevelInstance(levelData,
-            //     ProcessGoalAccomplished, ProcessMovesEnd);
-            // _initGrid.GenerateGrid(cells);
+#if UNITY_EDITOR
+            levelData ??= _getLevelSettings.GetLevelSettings().LevelData.First(data => data.LevelNumber == 1);
+#endif
+            var cells = _getLevel.GetLevel(levelData.LevelNumber);
+
+            if (cells is null)
+                return;
+
+            _levelInstance = new LevelInstance(levelData,
+                ProcessGoalAccomplished, ProcessMovesEnd, _upperPanelBehaviour,
+                _upperPanelBehaviour);
+            _upperPanelBehaviour.SetLevelNumber(levelData.LevelNumber);
+            _upperPanelBehaviour.SetMovesCount(levelData.Moves);
+            _upperPanelBehaviour.SetGoals(levelData.LevelGoals);
+            _initGrid.GenerateGrid(cells);
         }
 
         public void ProcessMove()
@@ -132,12 +153,15 @@ namespace Controllers
             _levelInstance.ProcessMatch(cellType);
         }
 
-        private void ProcessGoalAccomplished()
+        private void ProcessGoalAccomplished(int levelNumber)
         {
+            _setLastCompletedLevelNumber.SetLastCompletedLevelNumber(levelNumber);
+            _winPanel.ProcessWin();
         }
 
         private void ProcessMovesEnd()
         {
+            _loosePanel.ProcessLoose();
         }
     }
 }

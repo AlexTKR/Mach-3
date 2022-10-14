@@ -169,6 +169,7 @@ namespace Controllers
 
     public class GridInstance : IGrid
     {
+        private IProcessMatch _processMatch;
         private ICell[,] _cells;
         private Vector3[,] _cellPositions;
         private ICell _selectedCell;
@@ -178,7 +179,7 @@ namespace Controllers
         private List<CellType> _cellTypes;
 
         public GridInstance((int rowCount, int columnCount) gridData, IPool<ICell> cellPool,
-            SpriteAtlas cellSpriteAtlas)
+            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch)
         {
             var rowCount = gridData.rowCount;
             var columnCount = gridData.columnCount;
@@ -186,6 +187,7 @@ namespace Controllers
             _cellPositions = new Vector3[rowCount, columnCount];
             _cellSpriteAtlas = cellSpriteAtlas;
             _cellPool = cellPool;
+            _processMatch = processMatch;
 
             _cellTypes =
                 (List<CellType>)Enum.GetValues(typeof(CellType)).ConvertTo(typeof(List<CellType>));
@@ -197,6 +199,7 @@ namespace Controllers
             var cellId = cell.Id;
             _cells[cellId.RowIndex, cellId.ColumnIndex] = null;
             _cellPool.Return(cell);
+            _processMatch.ProcessMatch(cell.CellType);
         }
 
         public void SetData(float cellSize)
@@ -225,7 +228,7 @@ namespace Controllers
         {
             var cell = _cellPool.Get();
             cell.SetData(id, cellType, position,
-                _cellSpriteAtlas.GetSprite(cellType is CellType.Empty ? null : Helpers.CellTypeToName[cellType]),
+                _cellSpriteAtlas.GetSprite(cellType is CellType.Empty ? null : Helpers.TypeToName[cellType]),
                 ProcessMatchedCell);
             return cell;
         }
@@ -441,6 +444,7 @@ namespace Controllers
     {
         private IGrid _gridInstance;
         private IProcessMove _processMove;
+        private IProcessMatch _processMatch;
         private MainCamera _mainCamera;
         private SpriteAtlas _cellSpriteAtlas;
         private CellView _cellPrefab;
@@ -449,12 +453,14 @@ namespace Controllers
 
         [Inject]
         void Construct(MainCamera mainCamera, IGetCellAtlas getCellAtlas,
-            IGetCell getCell, IProcessMove processMove)
+            IGetCell getCell, IProcessMove processMove, IProcessMatch processMatch
+            , IGetLevelSettings getLevelSettings)
         {
             _mainCamera = mainCamera;
             _cellSpriteAtlas = getCellAtlas.GetCellAtlas();
             _cellPrefab = getCell.GetCellPrefab();
             _processMove = processMove;
+            _processMatch = processMatch;
         }
 
         public override Task Initialize()
@@ -476,7 +482,8 @@ namespace Controllers
             var columnCount = cells.GetColumnCount();
             SharedData.CurrentColumnCount = columnCount;
             SharedData.CurrentRowCount = rowCount;
-            _gridInstance = new GridInstance((rowCount, columnCount), cellPool, _cellSpriteAtlas);
+            _gridInstance = new GridInstance((rowCount, columnCount), cellPool,
+                _cellSpriteAtlas, _processMatch);
 
             var areaHeight = _playingAreaBounds.y * (1 - SharedData.HeightOffset * 2);
             var areaWidth = _playingAreaBounds.x * (1 - SharedData.WidthOffset * 2);

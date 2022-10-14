@@ -9,6 +9,7 @@ namespace Controllers
     {
         private MainCamera _mainCamera;
         private ISelectCell _selectCell;
+        private IAnyPanelActive _anyPanelActive;
 
         #region fields
 
@@ -18,10 +19,12 @@ namespace Controllers
 
 
         [Inject]
-        private void Construct(MainCamera mainCamera, ISelectCell selectCell)
+        private void Construct(MainCamera mainCamera, ISelectCell selectCell,
+            IAnyPanelActive anyPanelActive)
         {
             _mainCamera = mainCamera;
             _selectCell = selectCell;
+            _anyPanelActive = anyPanelActive;
         }
 
         public override void Tick()
@@ -32,6 +35,9 @@ namespace Controllers
 
         private void ReadInput()
         {
+            if(_anyPanelActive.IsAnyPanelActive)
+                return;
+            
             if (!Input.GetKeyDown(KeyCode.Mouse0))
                 return;
 

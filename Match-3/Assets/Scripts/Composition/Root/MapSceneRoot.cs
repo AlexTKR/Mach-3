@@ -1,22 +1,23 @@
-using System;
-using UnityEngine;
+using Controllers;
+using Root;
 using Zenject;
 
 namespace Composition.Root
 {
-    public class MapSceneRoot : MonoBehaviour
+    public class MapSceneRoot : RootInitiator
     {
-        private IInitBehaviour _initer;
+        private IMapController _mapController; 
         
         [Inject]
-        private void Construct()
+        private void Construct(IMapController mapController)
         {
-            
+            _mapController = mapController;
         }
 
-        private void Start()
+        protected override void Start()
         {
-            
+            base.Start();
+            _mapController.LoadMap();
         }
     }
 }

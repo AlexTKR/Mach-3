@@ -10,7 +10,7 @@ namespace Installers
         
         public override void InstallBindings()
         {
-               
+            Container.BindInterfacesAndSelfTo<MapCanvas>().FromInstance(_mapCanvas).AsSingle().NonLazy();
         }
     }
 }

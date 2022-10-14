@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1811997871843456562}
   - component: {fileID: 9002475885059006264}
   - component: {fileID: 2885609636250287422}
-  - component: {fileID: 1313856808046638938}
   m_Layer: 5
   m_Name: GoalLayout
   m_TagString: Untagged
@@ -73,18 +72,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1313856808046638938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1789369987804774125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 404af04742ed2504ab70ed13343e0899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3518998572515920386
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +214,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: Dummy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 70956447234d33b40b396b67314a5843, type: 2}
   m_sharedMaterial: {fileID: -5263338218149616523, guid: 70956447234d33b40b396b67314a5843, type: 2}
@@ -391,7 +378,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movesCount: {fileID: 7512620018895648133}
   _levelNumber: {fileID: 6146420317981733027}
-  menuButton: {fileID: 0}
+  menuButton: {fileID: 5488922859314428313}
+  _goalContent: {fileID: 1811997871843456562}
 --- !u!1 &6102236076399386665
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 15
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 70956447234d33b40b396b67314a5843, type: 2}
   m_sharedMaterial: {fileID: -5263338218149616523, guid: 70956447234d33b40b396b67314a5843, type: 2}
@@ -616,7 +604,6 @@ GameObject:
   - component: {fileID: 7572107420940649397}
   - component: {fileID: 5488922859314428313}
   - component: {fileID: 3463042543000474423}
-  - component: {fileID: 7314270397263906781}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -712,17 +699,4 @@ MonoBehaviour:
   _target: {fileID: 3357622882502741038}
   _pressedScale: {x: 0.8, y: 0.8, z: 0.8}
   _normalScale: {x: 1, y: 1, z: 1}
-  _duration: 0.5
---- !u!114 &7314270397263906781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8496795399242175312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a56518f79db7f604f8efdd84e6ea6c94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _button: {fileID: 5488922859314428313}
+  _duration: 0.3

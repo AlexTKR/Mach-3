@@ -35,7 +35,7 @@ namespace Composition
             IList<IInitView> initViews)
         {
             _initControllers = initControllers.Select(init => (IInit)init).ToList();
-            _initViews = initControllers.Select(init => (IInit)init).ToList();
+            _initViews = initViews.Select(init => (IInit)init).ToList();
         }
 
         public async Task InitControllers()

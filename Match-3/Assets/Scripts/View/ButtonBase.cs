@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public abstract class AdvertisementButton : MonoBehaviour
+    public abstract class ButtonBase : MonoBehaviour
     {
         [SerializeField] protected Button _button;
 
-        private Action _onClick;
+        protected Action _onClick;
 
         protected virtual void Awake()
         {

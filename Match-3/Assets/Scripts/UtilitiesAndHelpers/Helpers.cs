@@ -15,7 +15,7 @@ namespace UtilitiesAndHelpers
 
     public static class Helpers
     {
-        public static Dictionary<CellType, string> CellTypeToName = new Dictionary<CellType, string>()
+        public static Dictionary<CellType, string> TypeToName = new Dictionary<CellType, string>()
         {
             { CellType.Yellow, "Yellow" },
             { CellType.Blue, "Blue" },

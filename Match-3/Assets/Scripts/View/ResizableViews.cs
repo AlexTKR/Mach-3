@@ -12,6 +12,7 @@ namespace View
         {
             void ProcessUp(Transform target, Vector3 scale, float duration);
             void ProcessDown(Transform target, Vector3 scale, float duration);
+            void OnDisable();
         }
 
         public class ResizableView<T> : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
@@ -23,6 +24,7 @@ namespace View
             [SerializeField] private float _duration = SharedData.UIResizeSpeed;
 
             protected T _processor;
+            protected bool _isActive = true;
 
             protected virtual void Awake()
             {
@@ -31,20 +33,38 @@ namespace View
 
             public void OnPointerDown(PointerEventData eventData)
             {
+                if(!_isActive)
+                    return;
+                
                 _processor.ProcessUp(_target, _pressedScale, _duration);
             }
 
             public void OnPointerUp(PointerEventData eventData)
             {
+                if(!_isActive)
+                    return;
+                
                 _processor.ProcessDown(_target, _normalScale, _duration);
             }
 
             public void OnDrag(PointerEventData eventData)
             {
+                
+            }
+
+            public void Activate(bool status)
+            {
+                _isActive = status;
+            }
+
+            private void OnDisable()
+            {
+                _processor.OnDisable();
+                _target.localScale = _normalScale;
             }
         }
 
-        public class BaseResizeBehaviour : IPointerProcessor
+        public class ResizeBehaviourBase : IPointerProcessor
         {
             protected Tween _downTween;
             protected Tween _upTween;
@@ -66,10 +86,17 @@ namespace View
                 _upTween = target.DOScale(scale, duration);
                 _upTween.Play();
             }
+
+            public void OnDisable()
+            {
+                _downTween?.Kill();
+                _upTween?.Kill();
+            }
         }
 
-        public class BasicResizeBehaviour : BaseResizeBehaviour
+        public class BasicResizeBehaviour : ResizeBehaviourBase
         {
+            
         }
     }
 }

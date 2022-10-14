@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26be8d2ac400bb147b3ca9decb4471ce, type: 3}
   m_Name: LevelSettings
   m_EditorClassIdentifier: 
-  LevelData:
+  _levelData:
   - LevelNumber: 1
     Moves: 20
     LevelGoals:
@@ -23,43 +23,24 @@ MonoBehaviour:
     LevelGoals:
     - Type: 3
       Count: 12
-  - LevelNumber: 0
-    Moves: 0
+  - LevelNumber: 3
+    Moves: 20
     LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
+    - Type: 1
+      Count: 15
+    - Type: 2
+      Count: 15
+  - LevelNumber: 4
+    Moves: 25
     LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
+    - Type: 3
+      Count: 20
+    - Type: 1
+      Count: 20
+  - LevelNumber: 5
+    Moves: 25
     LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
-    LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
-    LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
-    LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
-    LevelGoals:
-    - Type: 0
-      Count: 0
-  - LevelNumber: 0
-    Moves: 0
-    LevelGoals:
-    - Type: 0
-      Count: 0
+    - Type: 1
+      Count: 25
+    - Type: 5
+      Count: 25

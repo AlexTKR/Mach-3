@@ -38,30 +38,16 @@ SpriteAtlas:
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: 6fc0f953090517f4a87027bb747ca392, type: 3}
   - {fileID: 21300000, guid: 23c39604c54f9f944ac7791b186f3dce, type: 3}
-  - {fileID: 21300000, guid: dcb71e09e79ff644592dfac79b9b1146, type: 3}
-  - {fileID: 21300000, guid: 742c9e49e9accad468e90bbf67ec3c83, type: 3}
-  - {fileID: 21300000, guid: a9c4e1b93ba4c354e8d3fffc53967ddd, type: 3}
   - {fileID: 21300000, guid: 50dd2e8acaa7426438d693e39eb73026, type: 3}
   - {fileID: 21300000, guid: fbb6c45b2e0f5424cace793121f03e56, type: 3}
   - {fileID: 21300000, guid: b7481a4c424715542a70ac1efc7468db, type: 3}
-  - {fileID: 21300000, guid: bfa2690eb81ca384eb9d262ff1c9be8d, type: 3}
-  - {fileID: 21300000, guid: 140169fe467b8b649aa2541e0c8d6c09, type: 3}
-  - {fileID: 21300000, guid: 5b0c287fddf11b24d910a6b285ee1807, type: 3}
   - {fileID: 21300000, guid: a292bddf8693e00428dace4a7f770aa6, type: 3}
   m_PackedSpriteNamesToIndex:
-  - grape
   - Blue
-  - banana
-  - pear
-  - apple
   - Green
   - Purple
   - Red
-  - blueberry
-  - strawberry
-  - orange
   - Yellow
   m_RenderDataMap: {}
   m_Tag: CellAtlas

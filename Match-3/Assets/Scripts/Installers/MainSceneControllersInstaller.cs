@@ -4,17 +4,17 @@ using Zenject;
 
 namespace Installers
 {
-    public abstract class ControllersInstaller : MonoInstaller
+    public abstract class InstallersWithInitBase : MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<Initer>().AsSingle().NonLazy();
+            Container.Bind<IInitBehaviour>().To<Initer>().AsSingle().NonLazy();
             Install();
         }
         protected abstract void Install();
     }
 
-    public class MainSceneControllersInstaller : ControllersInstaller
+    public class MainSceneControllersInstaller : InstallersWithInitBase
     {
         protected override void Install()
         {

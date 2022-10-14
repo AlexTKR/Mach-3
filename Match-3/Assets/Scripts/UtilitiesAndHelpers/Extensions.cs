@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using View;
 
 namespace UtilitiesAndHelpers
 {
@@ -17,6 +18,9 @@ namespace UtilitiesAndHelpers
 
         public static void SetActiveOptimize(this GameObject gameObject, bool status)
         {
+            if(gameObject is null)
+                return;
+            
             if (gameObject.activeSelf != status)
                 gameObject.SetActive(status);
         }
@@ -26,6 +30,12 @@ namespace UtilitiesAndHelpers
             var element = collection[index];
             collection.RemoveAt(index);
             return element;
+        }
+
+        public static T SetActiveStatusAndReturn<T>(this T item, bool status) where T : UIElementBase
+        {
+            item.gameObject.SetActiveOptimize(status);
+            return item;
         }
     }
 }

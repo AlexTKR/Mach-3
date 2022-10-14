@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace View
 {
-    public class MapCanvas : PanelBase
+    public class MapCanvas : CanvasBase
     {
         [SerializeField] private Transform _levelContent;
 

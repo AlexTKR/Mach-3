@@ -334,6 +334,7 @@ GameObject:
   - component: {fileID: 9072481031190034672}
   - component: {fileID: 9072481031190034673}
   - component: {fileID: 9072481031190034674}
+  - component: {fileID: 851633189}
   m_Layer: 5
   m_Name: MapCanvas
   m_TagString: Untagged
@@ -424,3 +425,16 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &851633189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9072481031190034675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76969b295616d5849872c279f8191882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelContent: {fileID: 893416639022000224}
