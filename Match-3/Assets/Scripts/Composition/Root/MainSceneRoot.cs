@@ -1,62 +1,64 @@
-using System;
 using Composition;
 using Controllers;
+using DB;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using View;
 using Zenject;
-using IProcessPanel = Controllers.IProcessPanel;
 
 namespace Root
 {
-    public abstract class RootInitiator : MonoBehaviour
+    public abstract class RootBase : MonoBehaviour
     {
-        protected IInitBehaviour _initer;
+        protected IInitiator _Initiator;
+        protected IDatabaseDispatcher _databaseDispatcher;
         protected ISetPanelProcessor _setPanelProcessor;
         protected IPanelProcessor _panelProcessor;
+        private IDatabase _database;
 
         [Inject]
-        private void Construct(IInitBehaviour initer, ISetPanelProcessor setPanelProcessor,
-            IPanelProcessor panelProcessor)
+        private void Construct(IInitiator initiator, ISetPanelProcessor setPanelProcessor,
+            IPanelProcessor panelProcessor, IDatabaseDispatcher databaseDispatcher,
+            IDatabase database)
         {
-            _initer = initer;
+            _Initiator = initiator;
             _setPanelProcessor = setPanelProcessor;
             _panelProcessor = panelProcessor;
+            _databaseDispatcher = databaseDispatcher;
+            _database = database;
         }
 
         protected async void Awake()
         {
-            if (_initer is null)
+            if (_Initiator is null)
                 return;
 
-            await _initer.InitViews();
+            await _Initiator.InitViews();
         }
 
         protected virtual async void Start()
         {
             _setPanelProcessor.SetProcessor(_panelProcessor);
 
-            if (_initer is null)
-                return;
-
-            await _initer.InitControllers();
+            if (_databaseDispatcher is { } && _database is { })
+                await _databaseDispatcher.Dispatch(_database);
+            
+            if (_Initiator is {})
+                await _Initiator.InitControllers();
         }
     }
 
-    public class MainSceneRoot : RootInitiator
+    public class MainSceneRoot : RootBase
     {
-        private ILoadGameSettings _loadGameSettings;
         private ILoadLevel<LevelData> _loadLevel;
         private IGetLevelData _getLevelData;
         private IGetEventSystem _getEventSystem;
         private MainCanvas _mainCanvas;
 
         [Inject]
-        private void Construct(ILoadGameSettings loadGameSettings,
-            ILoadLevel<LevelData> loadLevel, IGetLevelData getLevelData,
-            IGetEventSystem getEventSystem)
+        private void Construct(ILoadLevel<LevelData> loadLevel, 
+            IGetLevelData getLevelData, IGetEventSystem getEventSystem)
         {
-            _loadGameSettings = loadGameSettings;
             _loadLevel = loadLevel;
             _getLevelData = getLevelData;
             _getEventSystem = getEventSystem;
@@ -69,7 +71,6 @@ namespace Root
             if (FindObjectOfType<EventSystem>() is null)
                 DontDestroyOnLoad(MonoBehaviour.Instantiate(_getEventSystem.GetEventSystem()));
 #endif
-            _loadGameSettings.LoadGameSettings();
 
             base.Start();
             _loadLevel.LoadLevel(_getLevelData.GetCurrentLevelData());

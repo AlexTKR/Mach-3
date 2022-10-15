@@ -215,12 +215,28 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3108744472885763485}
     m_Modifications:
+    - target: {fileID: 3444540132358037606, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995415770942397362, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6174167410020036388, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
       propertyPath: m_Name
       value: WinPanel
       objectReference: {fileID: 0}
     - target: {fileID: 6174167410020036388, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6688551687892428710, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7002927957141093633, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8567888707525690695, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
@@ -321,12 +337,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3108744472885763485}
     m_Modifications:
+    - target: {fileID: 266696053385427912, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471694375231539332, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4247702081974383440, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859972164260466500, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6354371800386717638, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
       propertyPath: m_Name
       value: LosePanel
       objectReference: {fileID: 0}
     - target: {fileID: 6354371800386717638, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7831524662395606499, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8892092013015510437, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
@@ -427,6 +463,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3108744472885763485}
     m_Modifications:
+    - target: {fileID: 2253422248770474402, guid: f01f5414a2578414a84e2a51fd030bd8, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5686735803799998498, guid: f01f5414a2578414a84e2a51fd030bd8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -515,6 +555,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UpperPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 5686735803799998509, guid: f01f5414a2578414a84e2a51fd030bd8, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338306628561307417, guid: f01f5414a2578414a84e2a51fd030bd8, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f01f5414a2578414a84e2a51fd030bd8, type: 3}
 --- !u!224 &3108744474353951311 stripped
@@ -529,9 +577,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3108744472885763485}
     m_Modifications:
+    - target: {fileID: 1002205184090877294, guid: ee3a2da8ee26bcd4387816ce6eb55a86, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048900365463428324, guid: ee3a2da8ee26bcd4387816ce6eb55a86, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1160320218472921021, guid: ee3a2da8ee26bcd4387816ce6eb55a86, type: 3}
       propertyPath: m_Name
       value: PausePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919349346592908926, guid: ee3a2da8ee26bcd4387816ce6eb55a86, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6175316712446410138, guid: ee3a2da8ee26bcd4387816ce6eb55a86, type: 3}
       propertyPath: m_Pivot.x

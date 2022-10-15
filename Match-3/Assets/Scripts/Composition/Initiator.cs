@@ -19,13 +19,13 @@ namespace Composition
     {
     }
     
-    public interface IInitBehaviour
+    public interface IInitiator
     {
         Task InitControllers();
         Task InitViews();
     }
 
-    public class Initer : IInitBehaviour
+    public class Initiator : IInitiator
     {
         private List<IInit> _initControllers;
         private List<IInit> _initViews;

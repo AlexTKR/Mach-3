@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Composition.Root
 {
-    public class MapSceneRoot : RootInitiator
+    public class MapSceneRoot : RootBase
     {
         private IMapController _mapController; 
         

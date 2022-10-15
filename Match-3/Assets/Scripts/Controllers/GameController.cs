@@ -4,11 +4,6 @@ using Zenject;
 
 namespace Controllers
 {
-    public interface ILoadGameSettings
-    {
-        void LoadGameSettings();
-    }
-
     public interface ISetLevelNumber
     {
         public void SetLevelNumber(int number);
@@ -19,22 +14,7 @@ namespace Controllers
         LevelData GetCurrentLevelData();
     }
 
-    public interface IGetLastCompletedLevelNumber
-    {
-        int GetLastCompletedLevelNumber();
-    }
-
-    public interface ISetLastCompletedLevelNumber
-    {
-        void SetLastCompletedLevelNumber(int value);
-    }
-
-    public interface ILastCompletedLevelNumber : IGetLastCompletedLevelNumber,
-        ISetLastCompletedLevelNumber
-    {
-    }
-
-    public class GameController : ILoadGameSettings, IGetLevelData, ISetLevelNumber, ILastCompletedLevelNumber
+    public class GameController : IGetLevelData, ISetLevelNumber
     {
         private IGetGameSettings _getGameSettings;
         private IGetLevelSettings _getLevelSettings;
@@ -47,9 +27,11 @@ namespace Controllers
         {
             _getGameSettings = getGameSettings;
             _getLevelSettings = getLevelSettings;
+            
+            LoadGameSettings();
         }
 
-        public void LoadGameSettings()
+        private void LoadGameSettings()
         {
             SharedData.GameSettings = _getGameSettings.GetGameSettings();
         }
@@ -65,14 +47,6 @@ namespace Controllers
         public void SetLevelNumber(int number)
         {
             _currentLevelNumber = number;
-        }
-
-        public int GetLastCompletedLevelNumber() => _lastCompletedLevelNumber;
-
-        public void  SetLastCompletedLevelNumber(int value)
-        {
-            if (_lastCompletedLevelNumber < value)
-                _lastCompletedLevelNumber = value;
         }
     }
 }

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using DB;
 using Level;
+using UnityEditor;
+using UtilitiesAndHelpers;
 using Zenject;
 
 namespace Controllers
@@ -107,13 +111,12 @@ namespace Controllers
         private IUpperPanelBehaviour _upperPanelBehaviour;
         private ILoosePanel _loosePanel;
         private IWinPanel _winPanel;
-        private ISetLastCompletedLevelNumber _setLastCompletedLevelNumber;
+        private ISaveValue<int> _lastCompletedLevelNumber;
 
         [Inject]
         void Construct(IGetLevel getLevel, IInitGrid initGrid,
             IGetLevelSettings getLevelSettings, IUpperPanelBehaviour upperPanelBehaviour,
-            ILoosePanel loosePanel, IWinPanel winPanel, 
-            ISetLastCompletedLevelNumber setLastCompletedLevelNumber)
+            ILoosePanel loosePanel, IWinPanel winPanel)
         {
             _getLevel = getLevel;
             _initGrid = initGrid;
@@ -121,7 +124,12 @@ namespace Controllers
             _winPanel = winPanel;
             _getLevelSettings = getLevelSettings;
             _upperPanelBehaviour = upperPanelBehaviour;
-            _setLastCompletedLevelNumber = setLastCompletedLevelNumber;
+        }
+
+        public override Task InjectDatabase(IDatabase database)
+        {
+            _lastCompletedLevelNumber = new DatabaseValue<int>(database, SharedData.LastCompletedLevelId);
+            return base.InjectDatabase(database);
         }
 
         public void LoadLevel(LevelData levelData)
@@ -155,7 +163,9 @@ namespace Controllers
 
         private void ProcessGoalAccomplished(int levelNumber)
         {
-            _setLastCompletedLevelNumber.SetLastCompletedLevelNumber(levelNumber);
+            if (_lastCompletedLevelNumber.Value < levelNumber)
+                _lastCompletedLevelNumber.Save(levelNumber);
+
             _winPanel.ProcessWin();
         }
 
