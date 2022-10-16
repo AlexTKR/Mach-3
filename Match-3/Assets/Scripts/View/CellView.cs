@@ -9,7 +9,7 @@ namespace View
     public interface ICellView : ICellIdentifier,  IWorldCellPosition,
         IHighlightable, IMatch
     {
-        void SetData(Sprite sprite, CellIndexInGrid id, Vector3? position = null);
+        void SetData(Sprite sprite, CellIndexInGrid id, Vector3 position);
         Task Shift(CellIndexInGrid CellIndexInGrid, Vector3 position , bool onMatchShift = false);
     }
 
@@ -34,13 +34,12 @@ namespace View
             await DOTween.Sequence().Append(tw).AsyncWaitForCompletion();
         }
 
-        public void SetData(Sprite sprite, CellIndexInGrid id, Vector3? position = null)
+        public void SetData(Sprite sprite, CellIndexInGrid id, Vector3 position)
         {
             Id = id;
             _spriteRenderer.sprite = sprite;
-            if (position is { } pos)
-                transform.position = pos;
-            
+            transform.position = position;
+
             gameObject.SetActiveOptimize(true);
         }
 

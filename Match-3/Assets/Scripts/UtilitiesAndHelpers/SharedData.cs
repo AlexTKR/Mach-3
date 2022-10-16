@@ -20,5 +20,6 @@ namespace UtilitiesAndHelpers
         public static float UIResizeSpeed = 0.3f;
 
         public static string GetLevelName(int number) => $"Level {number}";
+        public static string LastCompletedLevelId = "LastCompletedLevel";
     }
 }

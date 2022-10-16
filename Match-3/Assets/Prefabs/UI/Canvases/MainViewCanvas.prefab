@@ -219,10 +219,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WinPanel
       objectReference: {fileID: 0}
-    - target: {fileID: 6174167410020036388, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8567888707525690695, guid: 8eb307f3cefbdbf40af97a2b97923020, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -324,10 +320,6 @@ PrefabInstance:
     - target: {fileID: 6354371800386717638, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
       propertyPath: m_Name
       value: LosePanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354371800386717638, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8892092013015510437, guid: 52e5db276d665c647ad0cb06fbf35517, type: 3}
       propertyPath: m_Pivot.x

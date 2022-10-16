@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Installers
 {
-    public class MapSceneControllersInstaller : InstallersWithInitBase
+    public class MapSceneControllersInstaller : ControllersInstallerBase
     {
         protected override void Install()
         {

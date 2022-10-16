@@ -9,7 +9,7 @@ namespace Controllers
 {
     public interface ILoadScene
     {
-        Task LoadScene(int sceneId);
+        void LoadScene(int sceneId);
     }
 
     public class SceneController : ILoadScene
@@ -24,18 +24,21 @@ namespace Controllers
             _processPanel = processPanel;
         }
 
-        public async Task LoadScene(int targetIndex)
+        public void LoadScene(int targetIndex)
         {
             _loadCanvas.Enable();
             var currentScene = SceneManager.GetActiveScene().buildIndex;
             var loadSceneAsync = SceneManager.LoadSceneAsync(targetIndex, LoadSceneMode.Additive);
 
-            loadSceneAsync.completed += operation =>
+            loadSceneAsync.completed += loadOperation =>
             {
                 _processPanel.ProcessSceneChanged();
                 SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(targetIndex));
-                SceneManager.UnloadSceneAsync(currentScene);
-                _loadCanvas.Disable();
+                var unloadOperation = SceneManager.UnloadSceneAsync(currentScene);
+                unloadOperation.completed += unloadOperation =>
+                {
+                    _loadCanvas.Disable();
+                };
             };
         }
     }
