@@ -16,6 +16,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<BundleController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SceneController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<ProcessPanelController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<DatabaseController>().AsSingle().NonLazy();
                 
             var loadCanvas =
                 Container.InstantiatePrefabForComponent<LoadCanvas>(_loadCanvas).SetActiveStatusAndReturn(false);

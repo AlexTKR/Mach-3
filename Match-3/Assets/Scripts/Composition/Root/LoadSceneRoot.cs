@@ -17,7 +17,7 @@ namespace Composition.Root
             _getEventSystem = getEventSystem;
         }
 
-        protected void Start()
+        private void Start()
         {
              DontDestroyOnLoad(MonoBehaviour.Instantiate(_getEventSystem.GetEventSystem()));
             _loadScene.LoadScene(SharedData.MapSceneIndex);

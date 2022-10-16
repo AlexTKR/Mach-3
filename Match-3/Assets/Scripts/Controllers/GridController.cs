@@ -106,6 +106,8 @@ namespace Controllers
     {
         CellType CellType { get; }
 
+        public ICellView CellView { get; }
+
         public void SetData(CellIndexInGrid indexInGrid, CellType cellType,
             Vector3 position, Sprite sprite, Action<ICell> onMatch);
 
@@ -117,10 +119,10 @@ namespace Controllers
     {
         public CellIndexInGrid Id { get; private set; }
         public CellType CellType { get; private set; }
+        public ICellView CellView => _cellView;
         public Vector3? CellPosition => _cellView?.CellPosition;
 
         private ICellView _cellView;
-
         private Action<ICell> _onMatch;
 
         public Cell(ICellView cellView)
@@ -128,8 +130,8 @@ namespace Controllers
             _cellView = cellView;
         }
 
-        public void SetData(CellIndexInGrid id, CellType cellType, Vector3 position, Sprite sprite,
-            Action<ICell> onMatch)
+        public void SetData(CellIndexInGrid id, CellType cellType, Vector3 position,
+            Sprite sprite, Action<ICell> onMatch)
         {
             Id = id;
             CellType = cellType;
@@ -162,9 +164,20 @@ namespace Controllers
 
     public interface IGrid
     {
-        void SetData(float cellSize);
         void RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position);
         Task<bool> SelectCell(CellIndexInGrid id);
+    }
+
+    public class CellComparer : IComparer<CellIndexInGrid>
+    {
+        public int Compare(CellIndexInGrid x, CellIndexInGrid y)
+        {
+            var rowCompareResult = x.RowIndex.CompareTo(y.RowIndex);
+            if (rowCompareResult != 0)
+                return rowCompareResult;
+
+            return -x.ColumnIndex.CompareTo(y.ColumnIndex);
+        }
     }
 
     public class GridInstance : IGrid
@@ -175,11 +188,12 @@ namespace Controllers
         private ICell _selectedCell;
         private IPool<ICell> _cellPool;
         private SpriteAtlas _cellSpriteAtlas;
-        private float _spawnYPosition;
         private List<CellType> _cellTypes;
+        private Random _random = new();
+        private float _spawnYPosition;
 
         public GridInstance((int rowCount, int columnCount) gridData, IPool<ICell> cellPool,
-            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch)
+            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition)
         {
             var rowCount = gridData.rowCount;
             var columnCount = gridData.columnCount;
@@ -188,6 +202,7 @@ namespace Controllers
             _cellSpriteAtlas = cellSpriteAtlas;
             _cellPool = cellPool;
             _processMatch = processMatch;
+            _spawnYPosition = spawnYPosition;
 
             _cellTypes =
                 (List<CellType>)Enum.GetValues(typeof(CellType)).ConvertTo(typeof(List<CellType>));
@@ -200,12 +215,6 @@ namespace Controllers
             _cells[cellId.RowIndex, cellId.ColumnIndex] = null;
             _cellPool.Return(cell);
             _processMatch.ProcessMatch(cell.CellType);
-        }
-
-        public void SetData(float cellSize)
-        {
-            var cellPosition = _cellPositions[0, 0];
-            _spawnYPosition = cellPosition.y + cellSize;
         }
 
         public void RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position)
@@ -232,8 +241,6 @@ namespace Controllers
                 ProcessMatchedCell);
             return cell;
         }
-
-        private Random _random = new Random();
 
         private CellType GetRandomType()
         {
@@ -402,7 +409,7 @@ namespace Controllers
 
         private async void ReFillCells(IList<CellIndexInGrid> matchedIds)
         {
-            var sortedCells = matchedIds.OrderBy(data => data).ToList();
+            var sortedCells = matchedIds.OrderBy(data => data, new CellComparer()).ToList();
             var shiftTasks = new List<Task>();
             matchedIds.Clear();
 
@@ -430,9 +437,14 @@ namespace Controllers
                     sortedCells.RemoveAt(0);
                 }
 
+                var shiftTask = shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift,
+                    true);
+
+                // if (!canShift)
+                //     await shiftTask;
+
                 matchedIds.Add(currentMatchedCellId);
-                shiftTasks.Add(
-                    shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift, true));
+                shiftTasks.Add(shiftTask);
             }
 
             await Task.WhenAll(shiftTasks);
@@ -477,13 +489,11 @@ namespace Controllers
             if (cells is null)
                 return;
 
-            var cellPool = new CellPool<ICell>(new CellFactory(_cellPrefab));
             var rowCount = cells.GetRowCount();
             var columnCount = cells.GetColumnCount();
             SharedData.CurrentColumnCount = columnCount;
             SharedData.CurrentRowCount = rowCount;
-            _gridInstance = new GridInstance((rowCount, columnCount), cellPool,
-                _cellSpriteAtlas, _processMatch);
+
 
             var areaHeight = _playingAreaBounds.y * (1 - SharedData.HeightOffset * 2);
             var areaWidth = _playingAreaBounds.x * (1 - SharedData.WidthOffset * 2);
@@ -491,22 +501,26 @@ namespace Controllers
             var approximateGridDimensions = Math.Min(areaHeight, areaWidth);
             var approximateCellDimensions =
                 approximateGridDimensions / Math.Max(SharedData.MaxRowSize, SharedData.MaxColumnSize);
-
+            var cellScale = new Vector3(approximateCellDimensions, approximateCellDimensions,
+                approximateCellDimensions);
             var halfCell = approximateCellDimensions / 2f;
             var isYEven = columnCount % 2 is 0;
             var isXEven = rowCount % 2 is 0;
             var middleYCell = (int)columnCount / 2;
             var middleXCell = (int)rowCount / 2;
 
+            var cellPool = new CellPool<ICell>(new CellFactory(_cellPrefab, cellScale));
+            _gridInstance = new GridInstance((rowCount, columnCount), cellPool,
+                _cellSpriteAtlas, _processMatch,
+                GetYPosition(isYEven, halfCell, approximateCellDimensions, middleYCell, 0) + approximateCellDimensions);
+
             for (int i = 0; i < rowCount; i++)
             {
-                var currentXPos = -((isXEven ? halfCell : 0) +
-                                    (approximateCellDimensions * ((middleXCell - (isXEven ? 1 : 0)) - i)));
+                var currentXPos = GetCurrentXPosition(isXEven, halfCell, approximateCellDimensions, middleXCell, i);
 
                 for (int j = 0; j < columnCount; j++)
                 {
-                    var currentYPos = (isYEven ? halfCell : 0) +
-                                      (approximateCellDimensions * ((middleYCell - (isYEven ? 1 : 0)) - j));
+                    var currentYPos = GetYPosition(isYEven, halfCell, approximateCellDimensions, middleYCell, j);
                     var currentCellPos = new Vector3(currentXPos, currentYPos, 0f);
                     var currentCellType = cells[i, j];
 
@@ -514,8 +528,20 @@ namespace Controllers
                         currentCellType, currentCellPos);
                 }
             }
+        }
 
-            _gridInstance.SetData(approximateCellDimensions);
+        private static float GetCurrentXPosition(bool isEven, float halfCell, float approximateCellDimensions,
+            int middleXCell, int index)
+        {
+            return -((isEven ? halfCell : 0) +
+                     (approximateCellDimensions * ((middleXCell - (isEven ? 1 : 0)) - index)));
+        }
+
+        private static float GetYPosition(bool isEven, float halfCell, float approximateCellDimensions, int middleYCell,
+            int index)
+        {
+            return (isEven ? halfCell : 0) +
+                   (approximateCellDimensions * ((middleYCell - (isEven ? 1 : 0)) - index));
         }
 
         private Task<bool> _selectTask;

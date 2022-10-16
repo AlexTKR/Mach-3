@@ -1,20 +1,22 @@
 using Composition;
 using Controllers;
+using DB;
 using Zenject;
 
 namespace Installers
 {
-    public abstract class InstallersWithInitBase : MonoInstaller
+    public abstract class ControllersInstallerBase : MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<IInitBehaviour>().To<Initer>().AsSingle().NonLazy();
+            Container.Bind<IInitiator>().To<Initiator>().AsSingle().NonLazy();
+            Container.Bind<IDatabaseDispatcher>().To<DatabaseDispatcher>().AsSingle().NonLazy();
             Install();
         }
         protected abstract void Install();
     }
 
-    public class MainSceneControllersInstaller : InstallersWithInitBase
+    public class MainSceneControllersInstaller : ControllersInstallerBase
     {
         protected override void Install()
         {
