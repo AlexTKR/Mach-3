@@ -24,12 +24,12 @@ namespace Controllers
         public int Moves;
         public List<LevelGoal> LevelGoals;
     }
-
-    public interface ILoadLevel<T>
+    
+    public interface ILoadLevel
     {
-        void LoadLevel(T level);
+        void LoadLevel();
     }
-
+    
     public interface IProcessMove
     {
         void ProcessMove();
@@ -102,7 +102,7 @@ namespace Controllers
         }
     }
 
-    public class LevelController : ControllerBase, ILoadLevel<LevelData>, ILevelController
+    public class LevelController : ControllerBase, ILoadLevel, ILevelController
     {
         private IGetLevel _getLevel;
         private IInitGrid _initGrid;
@@ -112,6 +112,7 @@ namespace Controllers
         private ILoosePanel _loosePanel;
         private IWinPanel _winPanel;
         private ISaveValue<int> _lastCompletedLevelNumber;
+        private ISaveValue<int> _selectedLevel;
 
         [Inject]
         void Construct(IGetLevel getLevel, IInitGrid initGrid,
@@ -129,14 +130,13 @@ namespace Controllers
         public override Task InjectDatabase(IDatabase database)
         {
             _lastCompletedLevelNumber = new DatabaseValue<int>(database, SharedData.LastCompletedLevelId);
+            _selectedLevel = new DatabaseValue<int>(database, SharedData.SelectedLevel);
             return base.InjectDatabase(database);
         }
 
-        public void LoadLevel(LevelData levelData)
+        public void LoadLevel()
         {
-#if UNITY_EDITOR
-            levelData ??= _getLevelSettings.GetLevelSettings().LevelData.First(data => data.LevelNumber == 1);
-#endif
+            var levelData = _getLevelSettings.GetLevelSettings().LevelData.First(data => data.LevelNumber ==  _selectedLevel.Value);
             var cells = _getLevel.GetLevel(levelData.LevelNumber);
 
             if (cells is null)

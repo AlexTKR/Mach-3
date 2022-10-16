@@ -21,5 +21,6 @@ namespace UtilitiesAndHelpers
 
         public static string GetLevelName(int number) => $"Level {number}";
         public static string LastCompletedLevelId = "LastCompletedLevel";
+        public static string SelectedLevel = "SelectedLevel";
     }
 }
