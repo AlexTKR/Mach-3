@@ -1,8 +1,6 @@
-using UnityEngine;
-
 namespace View
 {
-    public class LoadCanvas : UIElementBase
+    public class LoadCanvas : CanvasBase
     {
     }
 }

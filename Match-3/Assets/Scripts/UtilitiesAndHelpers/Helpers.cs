@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Level;
 
 namespace UtilitiesAndHelpers
 {
-    
     public enum Directions
     {
         Up,

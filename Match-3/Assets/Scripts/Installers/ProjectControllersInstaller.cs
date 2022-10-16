@@ -15,7 +15,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<GameController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<BundleController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SceneController>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<ProcessPanelController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<PanelController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<DatabaseController>().AsSingle().NonLazy();
                 
             var loadCanvas =

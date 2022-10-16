@@ -67,7 +67,6 @@ namespace Root
         protected override void Start()
         {
 #if UNITY_EDITOR
-
             if (FindObjectOfType<EventSystem>() is null)
                 DontDestroyOnLoad(MonoBehaviour.Instantiate(_getEventSystem.GetEventSystem()));
 #endif

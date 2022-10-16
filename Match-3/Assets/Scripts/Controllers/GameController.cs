@@ -18,7 +18,6 @@ namespace Controllers
     {
         private IGetGameSettings _getGameSettings;
         private IGetLevelSettings _getLevelSettings;
-        private int _lastCompletedLevelNumber;
 
         private int _currentLevelNumber;
 
