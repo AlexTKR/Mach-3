@@ -19,9 +19,9 @@ namespace Controllers
         void ProcessSceneChanged();
     }
 
-    public class ProcessPanelController : IProcessPanel
+    public class PanelController : IProcessPanel
     {
-        private View.IPanelProcessor _panelProcessor;
+        private IPanelProcessor _panelProcessor;
         private PanelBase _currentActivePanel;
 
         public bool IsAnyPanelActive => _currentActivePanel is { IsActive: true };
@@ -42,7 +42,7 @@ namespace Controllers
             _currentActivePanel = panel;
         }
 
-        public void SetProcessor(View.IPanelProcessor panelProcessor)
+        public void SetProcessor(IPanelProcessor panelProcessor)
         {
             _panelProcessor = panelProcessor;
         }

@@ -440,9 +440,6 @@ namespace Controllers
                 var shiftTask = shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift,
                     true);
 
-                // if (!canShift)
-                //     await shiftTask;
-
                 matchedIds.Add(currentMatchedCellId);
                 shiftTasks.Add(shiftTask);
             }
