@@ -12,7 +12,7 @@ namespace Controllers
 
     public class MapSceneUIController : ControllerBase, ILevelPanel
     {
-        private ILoadLevel<int> _loadLevel;
+        private ISelectLevel _selectLevel;
         private IGetLevelPanel _getLevelPanel;
         private LevelPanel _leftPanelPrefab;
         private LevelPanel _rightPanelPrefab;
@@ -20,10 +20,10 @@ namespace Controllers
         private bool isLastLeft;
 
         [Inject]
-        void Construct(IGetLevelPanel getLevelPanel,  ILoadLevel<int> loadLevel ,MapCanvas mapCanvas)
+        void Construct(IGetLevelPanel getLevelPanel,  ISelectLevel selectLevel ,MapCanvas mapCanvas)
         {
             _getLevelPanel = getLevelPanel;
-            _loadLevel = loadLevel;
+            _selectLevel = selectLevel;
             _mapCanvas = mapCanvas;
         }
 
@@ -45,7 +45,7 @@ namespace Controllers
 
         private void ProcessLevelSelected(int levelNumber)
         {
-            _loadLevel.LoadLevel(levelNumber);
+            _selectLevel.SelectLevel(levelNumber);
         }
     }
 }

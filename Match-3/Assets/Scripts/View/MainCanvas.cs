@@ -11,15 +11,15 @@ namespace View
     public abstract class CanvasBase : PanelBase, IPanelProcessor
     {
         [SerializeField] protected GameObject _blockingPanel;
-        
+
         public virtual void ProcessPanelActivated(bool status)
         {
-            _blockingPanel.SetActiveOptimize(status);
+            if (_blockingPanel != null )
+                _blockingPanel.SetActiveOptimize(status);
         }
     }
 
     public class MainCanvas : CanvasBase
     {
-        
     }
 }

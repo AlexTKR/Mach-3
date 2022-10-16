@@ -1,51 +1,23 @@
-using System.Linq;
 using UtilitiesAndHelpers;
 using Zenject;
 
 namespace Controllers
 {
-    public interface ISetLevelNumber
-    {
-        public void SetLevelNumber(int number);
-    }
-
-    public interface IGetLevelData
-    {
-        LevelData GetCurrentLevelData();
-    }
-
-    public class GameController : IGetLevelData, ISetLevelNumber
+    public class GameController 
     {
         private IGetGameSettings _getGameSettings;
-        private IGetLevelSettings _getLevelSettings;
-
-        private int _currentLevelNumber;
-
+        
         [Inject]
-        void Construct(IGetGameSettings getGameSettings, IGetLevelSettings getLevelSettings)
+        void Construct(IGetGameSettings getGameSettings)
         {
             _getGameSettings = getGameSettings;
-            _getLevelSettings = getLevelSettings;
-            
+
             LoadGameSettings();
         }
 
         private void LoadGameSettings()
         {
             SharedData.GameSettings = _getGameSettings.GetGameSettings();
-        }
-
-        public LevelData GetCurrentLevelData()
-        {
-            return _currentLevelNumber == 0
-                ? null
-                : _getLevelSettings.GetLevelSettings().LevelData
-                    .First(data => data.LevelNumber == _currentLevelNumber);
-        }
-
-        public void SetLevelNumber(int number)
-        {
-            _currentLevelNumber = number;
         }
     }
 }
