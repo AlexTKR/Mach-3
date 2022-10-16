@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public interface IDatabase 
+    public interface IDatabase
     {
         LiteCollection<T> GetCollection<T>();
     }
-     
+
     public class DatabaseController : IDatabase
     {
         private static readonly string _path =
@@ -44,10 +44,12 @@ namespace Controllers
             return newCollection;
         }
 
+#if UNITY_EDITOR
         [MenuItem("Database/DeleteDatabase")]
         private static void DeleteDatabase()
         {
             File.Delete(_path);
         }
+#endif
     }
 }
