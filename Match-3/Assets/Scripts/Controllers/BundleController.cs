@@ -24,7 +24,7 @@ namespace Controllers
 
     public interface IGetLevelSettings
     {
-        Settings.IGetLevelData GetLevelSettings();
+        IGetLevelData GetLevelSettings();
     }
 
     public interface IGetLevelPanel
@@ -79,7 +79,7 @@ namespace Controllers
             return _gameSettings ??= Resources.Load<GameSettings>("Settings/GameSettings");
         }
 
-        public Settings.IGetLevelData GetLevelSettings()
+        public IGetLevelData GetLevelSettings()
         {
             return _levelSettings ??= Resources.Load<LevelSettings>("Settings/LevelSettings");
         }

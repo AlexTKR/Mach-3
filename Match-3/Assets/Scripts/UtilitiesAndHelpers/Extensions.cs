@@ -18,9 +18,6 @@ namespace UtilitiesAndHelpers
 
         public static void SetActiveOptimize(this GameObject gameObject, bool status)
         {
-            if(gameObject is null)
-                return;
-            
             if (gameObject.activeSelf != status)
                 gameObject.SetActive(status);
         }

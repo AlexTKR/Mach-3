@@ -10,27 +10,32 @@ namespace Controllers
         void LoadMap();
     }
 
-    public class MapController : ControllerBase, IMapController, ILoadLevel<int>
+    public interface ISelectLevel
+    {
+        void SelectLevel(int levelNumber);
+    }
+
+    public class MapController : ControllerBase, IMapController, ISelectLevel
     {
         private IGetLevelSettings _getLevelSettings;
         private ILevelPanel _levelPanel;
-        private ISetLevelNumber _setLevelNumber;
         private ILoadScene _loadScene;
-        private DatabaseValue<int> _lastCompletedLevelNumber;
+        private ISaveValue<int> _lastCompletedLevelNumber;
+        private ISaveValue<int> _selectedLevel;
 
         [Inject]
-        void Construct(IGetLevelSettings getLevelSettings, ILevelPanel levelPanel,
-            ISetLevelNumber setLevelNumber, ILoadScene loadScene)
+        void Construct(IGetLevelSettings getLevelSettings, ILevelPanel levelPanel
+            , ILoadScene loadScene)
         {
             _getLevelSettings = getLevelSettings;
             _levelPanel = levelPanel;
-            _setLevelNumber = setLevelNumber;
             _loadScene = loadScene;
         }
 
         public override Task InjectDatabase(IDatabase database)
         {
             _lastCompletedLevelNumber = new DatabaseValue<int>(database, SharedData.LastCompletedLevelId);
+            _selectedLevel = new DatabaseValue<int>(database, SharedData.SelectedLevel);
             return base.InjectDatabase(database);
         }
 
@@ -46,9 +51,9 @@ namespace Controllers
             }
         }
 
-        public void LoadLevel(int levelNumber)
+        public void SelectLevel(int levelNumber)
         {
-            _setLevelNumber.SetLevelNumber(levelNumber);
+            _selectedLevel.Save(levelNumber);
             _loadScene.LoadScene(SharedData.MainSceneIndex);
         }
     }

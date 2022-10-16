@@ -30,10 +30,8 @@ namespace Root
 
         protected async void Awake()
         {
-            if (_Initiator is null)
-                return;
-
-            await _Initiator.InitViews();
+            if (_Initiator is { })
+                await _Initiator.InitViews();
         }
 
         protected virtual async void Start()
@@ -42,25 +40,23 @@ namespace Root
 
             if (_databaseDispatcher is { } && _database is { })
                 await _databaseDispatcher.Dispatch(_database);
-            
-            if (_Initiator is {})
+
+            if (_Initiator is { })
                 await _Initiator.InitControllers();
         }
     }
 
     public class MainSceneRoot : RootBase
     {
-        private ILoadLevel<LevelData> _loadLevel;
-        private IGetLevelData _getLevelData;
+        private ILoadLevel _loadLevel;
         private IGetEventSystem _getEventSystem;
         private MainCanvas _mainCanvas;
 
         [Inject]
-        private void Construct(ILoadLevel<LevelData> loadLevel, 
-            IGetLevelData getLevelData, IGetEventSystem getEventSystem)
+        private void Construct(ILoadLevel loadLevel,
+            IGetEventSystem getEventSystem)
         {
             _loadLevel = loadLevel;
-            _getLevelData = getLevelData;
             _getEventSystem = getEventSystem;
         }
 
@@ -72,7 +68,7 @@ namespace Root
 #endif
 
             base.Start();
-            _loadLevel.LoadLevel(_getLevelData.GetCurrentLevelData());
+            _loadLevel.LoadLevel();
         }
     }
 }
