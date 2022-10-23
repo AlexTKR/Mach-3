@@ -24,12 +24,12 @@ namespace Controllers
         public int Moves;
         public List<LevelGoal> LevelGoals;
     }
-    
+
     public interface ILoadLevel
     {
         void LoadLevel();
     }
-    
+
     public interface IProcessMove
     {
         void ProcessMove();
@@ -105,7 +105,7 @@ namespace Controllers
     public class LevelController : ControllerBase, ILoadLevel, ILevelController
     {
         private IGetLevel _getLevel;
-        private IInitGrid _initGrid;
+        private IGridBehaviour _gridBehaviour;
         private ILevelInstance _levelInstance;
         private IGetLevelSettings _getLevelSettings;
         private IUpperPanelBehaviour _upperPanelBehaviour;
@@ -115,12 +115,12 @@ namespace Controllers
         private ISaveValue<int> _selectedLevel;
 
         [Inject]
-        void Construct(IGetLevel getLevel, IInitGrid initGrid,
+        void Construct(IGetLevel getLevel, IGridBehaviour gridBehaviour,
             IGetLevelSettings getLevelSettings, IUpperPanelBehaviour upperPanelBehaviour,
             ILoosePanel loosePanel, IWinPanel winPanel)
         {
             _getLevel = getLevel;
-            _initGrid = initGrid;
+            _gridBehaviour = gridBehaviour;
             _loosePanel = loosePanel;
             _winPanel = winPanel;
             _getLevelSettings = getLevelSettings;
@@ -136,7 +136,8 @@ namespace Controllers
 
         public void LoadLevel()
         {
-            var levelData = _getLevelSettings.GetLevelSettings().LevelData.First(data => data.LevelNumber ==  _selectedLevel.Value);
+            var levelData = _getLevelSettings.GetLevelSettings().LevelData
+                .First(data => data.LevelNumber == _selectedLevel.Value);
             var cells = _getLevel.GetLevel(levelData.LevelNumber);
 
             if (cells is null)
@@ -148,7 +149,7 @@ namespace Controllers
             _upperPanelBehaviour.SetLevelNumber(levelData.LevelNumber);
             _upperPanelBehaviour.SetMovesCount(levelData.Moves);
             _upperPanelBehaviour.SetGoals(levelData.LevelGoals);
-            _initGrid.GenerateGrid(cells);
+            _gridBehaviour.GenerateGrid(cells);
         }
 
         public void ProcessMove()
@@ -161,10 +162,15 @@ namespace Controllers
             _levelInstance.ProcessMatch(cellType);
         }
 
-        private void ProcessGoalAccomplished(int levelNumber)
+        private async void ProcessGoalAccomplished(int levelNumber)
         {
             if (_lastCompletedLevelNumber.Value < levelNumber)
                 _lastCompletedLevelNumber.Save(levelNumber);
+
+            while (_gridBehaviour.IsActive)
+            {
+                await Task.Yield();
+            }
 
             _winPanel.ProcessWin();
         }
