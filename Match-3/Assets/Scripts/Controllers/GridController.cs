@@ -6,6 +6,7 @@ using Level;
 using ModestTree;
 using Pools;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
 using UtilitiesAndHelpers;
@@ -70,9 +71,14 @@ namespace Controllers
         }
     }
 
-    public interface IInitGrid
+    public interface IGridBehaviour : IGridActive
     {
         void GenerateGrid(CellType[,] cells);
+    }
+
+    public interface IGridActive
+    {
+        bool IsActive { get; }
     }
 
     public interface ISelectCell
@@ -101,8 +107,13 @@ namespace Controllers
         Vector3? CellPosition { get; }
     }
 
+    public interface IMoveCell
+    {
+        Task Move(Vector3 position);
+    }
+
     public interface ICell : ICellIdentifier, IWorldCellPosition,
-        IHighlightable, IMatch
+        IHighlightable, IMatch, IMoveCell
     {
         CellType CellType { get; }
 
@@ -150,6 +161,11 @@ namespace Controllers
             await onFinish.Invoke(this);
         }
 
+        public async Task Move(Vector3 position)
+        {
+            await _cellView.Move(position);
+        }
+
         public void Highlight(bool status)
         {
             _cellView.Highlight(status);
@@ -162,7 +178,7 @@ namespace Controllers
         }
     }
 
-    public interface IGrid
+    public interface IGrid : IGridActive
     {
         void RegisterCell(CellIndexInGrid id, CellType cellType, Vector3 position);
         Task<bool> SelectCell(CellIndexInGrid id);
@@ -172,16 +188,19 @@ namespace Controllers
     {
         public int Compare(CellIndexInGrid x, CellIndexInGrid y)
         {
-            var rowCompareResult = x.RowIndex.CompareTo(y.RowIndex);
-            if (rowCompareResult != 0)
-                return rowCompareResult;
+            var columnCompareResult = -x.ColumnIndex.CompareTo(y.ColumnIndex);
+            if (columnCompareResult != 0)
+                return columnCompareResult;
 
-            return -x.ColumnIndex.CompareTo(y.ColumnIndex);
+            return x.RowIndex.CompareTo(y.RowIndex);
         }
     }
 
     public class GridInstance : IGrid
     {
+        private Dictionary<int, Queue<CellIndexInGrid>> _rowToSpawnQueue = new();
+        private Dictionary<int, Task> _rowToSpawnDelayTask = new();
+        private Random _random = new();
         private IProcessMatch _processMatch;
         private ICell[,] _cells;
         private Vector3[,] _cellPositions;
@@ -189,11 +208,12 @@ namespace Controllers
         private IPool<ICell> _cellPool;
         private SpriteAtlas _cellSpriteAtlas;
         private List<CellType> _cellTypes;
-        private Random _random = new();
+        private Task<bool> _swapTask;
         private float _spawnYPosition;
+        private float _firstColumnPosition;
 
         public GridInstance((int rowCount, int columnCount) gridData, IPool<ICell> cellPool,
-            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition)
+            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition, float firstColumnPosition)
         {
             var rowCount = gridData.rowCount;
             var columnCount = gridData.columnCount;
@@ -203,10 +223,17 @@ namespace Controllers
             _cellPool = cellPool;
             _processMatch = processMatch;
             _spawnYPosition = spawnYPosition;
+            _firstColumnPosition = firstColumnPosition;
 
             _cellTypes =
                 (List<CellType>)Enum.GetValues(typeof(CellType)).ConvertTo(typeof(List<CellType>));
             _cellTypes.Remove(CellType.Empty);
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                _rowToSpawnQueue[i] = new Queue<CellIndexInGrid>();
+                _rowToSpawnDelayTask[i] = Task.CompletedTask;
+            }
         }
 
         private void ProcessMatchedCell(ICell cell)
@@ -225,11 +252,17 @@ namespace Controllers
             _cellPositions[id.RowIndex, id.ColumnIndex] = position;
         }
 
-        private ICell SpawnRandomCell(CellIndexInGrid id)
+        private async Task<ICell> SpawnRandomCell(CellIndexInGrid id)
         {
+            while (_rowToSpawnQueue[id.RowIndex].Peek() != id)
+            {
+                await Task.Yield();
+            }
+
             var targetPosition = _cellPositions[id.RowIndex, id.ColumnIndex];
             var spawnPosition = new Vector3(targetPosition.x, _spawnYPosition, targetPosition.z);
-            return SpawnCell(id, GetRandomType(), spawnPosition);
+            var cell = SpawnCell(id, GetRandomType(), spawnPosition);
+            return cell;
         }
 
 
@@ -282,8 +315,6 @@ namespace Controllers
 
             return true;
         }
-
-        private Task<bool> _swapTask;
 
         private async Task<bool> SwapTiles(ICell firstCell, ICell secondCell)
         {
@@ -409,47 +440,75 @@ namespace Controllers
 
         private async void ReFillCells(IList<CellIndexInGrid> matchedIds)
         {
-            var sortedCells = matchedIds.OrderBy(data => data, new CellComparer()).ToList();
+            var sortedCells = new List<CellIndexInGrid>(matchedIds);
             var shiftTasks = new List<Task>();
             matchedIds.Clear();
 
             while (!sortedCells.IsEmpty())
             {
-                var currentMatchedCellId = sortedCells[0];
-                var currentMatchedCellPosition =
-                    _cellPositions[currentMatchedCellId.RowIndex, currentMatchedCellId.ColumnIndex];
-                var upwardsCell = currentMatchedCellId.ColumnIndex == 0
-                    ? null
-                    : _cells[currentMatchedCellId.RowIndex, currentMatchedCellId.ColumnIndex - 1];
-                var canShift = upwardsCell is { };
+                sortedCells.Sort(new CellComparer());
+                var currentCellsToShift =
+                    sortedCells.Where(cell => cell.ColumnIndex == sortedCells[0].ColumnIndex).ToList();
+                sortedCells.RemoveRange(0, currentCellsToShift.Count);
 
-                ICell shiftCell;
-
-                if (canShift)
+                for (int i = 0; i < currentCellsToShift.Count; i++)
                 {
-                    sortedCells[0] = upwardsCell.Id;
-                    shiftCell = upwardsCell;
-                }
-                else
-                {
-                    var cell = SpawnRandomCell(currentMatchedCellId);
-                    shiftCell = cell;
-                    sortedCells.RemoveAt(0);
-                }
+                    var currentMatchedCellId = currentCellsToShift[i];
+                    var currentMatchedCellPosition =
+                        _cellPositions[currentMatchedCellId.RowIndex, currentMatchedCellId.ColumnIndex];
+                    var upwardsCell = GetUpwardCell(currentMatchedCellId);
 
-                var shiftTask = shiftCell.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift,
-                    true);
+                    if (upwardsCell is { })
+                        sortedCells.Add(upwardsCell.Id);
+                    var shiftTask = ShiftCell(upwardsCell, currentMatchedCellId, currentMatchedCellPosition);
 
-                matchedIds.Add(currentMatchedCellId);
-                shiftTasks.Add(shiftTask);
+                    matchedIds.Add(currentMatchedCellId);
+                    shiftTasks.Add(shiftTask);
+                }
             }
 
             await Task.WhenAll(shiftTasks);
             FindMatches(matchedIds);
         }
+
+        private async Task ShiftCell(ICell cellToShift, CellIndexInGrid currentMatchedCellId,
+            Vector3 currentMatchedCellPosition)
+        {
+            if (cellToShift is null)
+            {
+                _rowToSpawnQueue[currentMatchedCellId.RowIndex].Enqueue(currentMatchedCellId);
+                cellToShift = await SpawnRandomCell(currentMatchedCellId);
+                await _rowToSpawnDelayTask[currentMatchedCellId.RowIndex];
+                _rowToSpawnDelayTask[currentMatchedCellId.RowIndex] = Task.Delay(SharedData.GameSettings.SpawnDelay);
+                _rowToSpawnQueue[currentMatchedCellId.RowIndex].Dequeue();
+            }
+
+            await cellToShift.Shift(currentMatchedCellId, currentMatchedCellPosition, ProcessCellShift,
+                true);
+        }
+
+
+        ICell GetUpwardCell(CellIndexInGrid indexInGrid)
+        {
+            var columnIndex = indexInGrid.ColumnIndex - 1;
+            ICell cell = default;
+
+            while (columnIndex >= 0 && cell is null)
+            {
+                cell = _cells[indexInGrid.RowIndex, columnIndex];
+                columnIndex--;
+            }
+
+            if (cell is { })
+                _cells[cell.Id.RowIndex, cell.Id.ColumnIndex] = null;
+
+            return cell;
+        }
+
+        public bool IsActive => _swapTask is {};
     }
 
-    public class GridController : ControllerBase, IInitGrid, ISelectCell
+    public class GridBehaviourController : ControllerBase, IGridBehaviour, ISelectCell
     {
         private IGrid _gridInstance;
         private IProcessMove _processMove;
@@ -471,6 +530,8 @@ namespace Controllers
             _processMove = processMove;
             _processMatch = processMatch;
         }
+
+        public bool IsActive => _gridInstance.IsActive;
 
         public override Task Initialize()
         {
@@ -505,11 +566,12 @@ namespace Controllers
             var isXEven = rowCount % 2 is 0;
             var middleYCell = (int)columnCount / 2;
             var middleXCell = (int)rowCount / 2;
+            var firstColumnPosition = GetYPosition(isYEven, halfCell, approximateCellDimensions, middleYCell, 0);
 
             var cellPool = new CellPool<ICell>(new CellFactory(_cellPrefab, cellScale));
             _gridInstance = new GridInstance((rowCount, columnCount), cellPool,
                 _cellSpriteAtlas, _processMatch,
-                GetYPosition(isYEven, halfCell, approximateCellDimensions, middleYCell, 0) + approximateCellDimensions);
+                firstColumnPosition + approximateCellDimensions, firstColumnPosition);
 
             for (int i = 0; i < rowCount; i++)
             {
@@ -555,5 +617,6 @@ namespace Controllers
 
             _selectTask = null;
         }
+        
     }
 }

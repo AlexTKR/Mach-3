@@ -23,7 +23,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<MainSceneUIController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<CameraController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LevelController>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<GridController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<GridBehaviourController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<InputController>().AsSingle().NonLazy();
         }
     }

@@ -7,5 +7,6 @@ namespace Settings
     {
         public AnimationCurve ShiftCellCurve;
         public float CellShiftSpeed;
+        public int SpawnDelay;
     }
 }
