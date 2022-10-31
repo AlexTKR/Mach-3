@@ -1,13 +1,10 @@
 using System.Threading.Tasks;
 using Level;
 using Settings;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-//using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.ResourceManagement.AsyncOperations;
-//using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using View;
 
@@ -50,7 +47,7 @@ public class LoadReference<T, TIn> : ILoadable<T>
 
     public void Release()
     {
-        //Addressables.Release(_handle);
+        Addressables.Release(_handle);
     }
 }
 

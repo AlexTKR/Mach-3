@@ -20,8 +20,7 @@ namespace Composition.Root
         private async void Start()
         {
             var eventSystem = await _getEventSystem.GetEventSystem().Load();
-             DontDestroyOnLoad(MonoBehaviour.Instantiate(eventSystem));
-             _getEventSystem.GetEventSystem().Release();
+            DontDestroyOnLoad(MonoBehaviour.Instantiate(eventSystem));
             _loadScene.LoadScene(SharedData.MapSceneIndex);
         }
     }
