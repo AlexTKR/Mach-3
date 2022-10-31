@@ -134,21 +134,23 @@ namespace Controllers
             return base.InjectDatabase(database);
         }
 
-        public void LoadLevel()
+        public async void LoadLevel()
         {
-            var levelData = _getLevelSettings.GetLevelSettings().LevelData
+            var levelData = await _getLevelSettings.GetLevelSettings().Load(autoRelease:false);
+            var currentData = levelData.LevelData
                 .First(data => data.LevelNumber == _selectedLevel.Value);
-            var cells = _getLevel.GetLevel(levelData.LevelNumber);
+            var getCells = await _getLevel.GetCells().Load();
+            var cells = getCells.GetCells(currentData.LevelNumber);
 
             if (cells is null)
                 return;
 
-            _levelInstance = new LevelInstance(levelData,
+            _levelInstance = new LevelInstance(currentData,
                 ProcessGoalAccomplished, ProcessMovesEnd, _upperPanelBehaviour,
                 _upperPanelBehaviour);
-            _upperPanelBehaviour.SetLevelNumber(levelData.LevelNumber);
-            _upperPanelBehaviour.SetMovesCount(levelData.Moves);
-            _upperPanelBehaviour.SetGoals(levelData.LevelGoals);
+            _upperPanelBehaviour.SetLevelNumber(currentData.LevelNumber);
+            _upperPanelBehaviour.SetMovesCount(currentData.Moves);
+            _upperPanelBehaviour.SetGoals(currentData.LevelGoals);
             _gridBehaviour.GenerateGrid(cells);
         }
 

@@ -17,9 +17,11 @@ namespace Composition.Root
             _getEventSystem = getEventSystem;
         }
 
-        private void Start()
+        private async void Start()
         {
-             DontDestroyOnLoad(MonoBehaviour.Instantiate(_getEventSystem.GetEventSystem()));
+            var eventSystem = await _getEventSystem.GetEventSystem().Load();
+             DontDestroyOnLoad(MonoBehaviour.Instantiate(eventSystem));
+             _getEventSystem.GetEventSystem().Release();
             _loadScene.LoadScene(SharedData.MapSceneIndex);
         }
     }

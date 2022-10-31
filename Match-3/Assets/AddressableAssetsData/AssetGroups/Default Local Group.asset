@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d59c6241998bc3e46bcacad80d3374ac
+  m_SerializeEntries:
+  - m_GUID: 6ab23ffff23e03e43b5b10c4bf1e0381
+    m_Address: GameSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 16bbbea1121e5554daddd482d549ff39
+    m_Address: EventSystem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e54225df894ba0647b1792abfe2589b8
+    m_Address: Cell
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6f218d0be071d9f4abf3ddfcf0d3e293
+    m_Address: CellAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6f4ac9d821c059045a1abb56782d9603
+    m_Address: LevelSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8e501527df6feb94c9a2f1cc13685009
+    m_Address: LeftLevelPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8f7b4faca7039d14791ddc02ac5ec0b2
+    m_Address: RightLevelPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a78b082bcf79a8141800017d18d59440
+    m_Address: GoalImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 715a16696024c3545ad56ed45a5721a5
+    m_Address: LevelHolder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 866490dea9d093d48956c0803374d22a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2e050d2b5a972f94da23fb8dd0d86cb1, type: 2}
+    - {fileID: 11400000, guid: 9c8a8a6472bee134abfc5a147a3aee50, type: 2}

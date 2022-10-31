@@ -27,11 +27,10 @@ namespace Controllers
             _mapCanvas = mapCanvas;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            _leftPanelPrefab = _getLevelPanel.GetLeft();
-            _rightPanelPrefab = _getLevelPanel.GetRight();
-            return base.Initialize();
+            _leftPanelPrefab = await _getLevelPanel.GetLeft().Load();
+            _rightPanelPrefab = await _getLevelPanel.GetRight().Load();
         }
 
         public void LoadPanel(int levelNumber, bool isActive)

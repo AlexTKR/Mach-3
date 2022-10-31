@@ -17,7 +17,7 @@ namespace Controllers
 
         private void LoadGameSettings()
         {
-            SharedData.GameSettings = _getGameSettings.GetGameSettings();
+            SharedData.GameSettings = _getGameSettings.GetGameSettings().Load(runAsync: false).Result;
         }
     }
 }

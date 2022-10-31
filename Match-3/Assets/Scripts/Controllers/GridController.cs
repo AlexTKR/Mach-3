@@ -6,7 +6,6 @@ using Level;
 using ModestTree;
 using Pools;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
 using UtilitiesAndHelpers;
@@ -116,9 +115,7 @@ namespace Controllers
         IHighlightable, IMatch, IMoveCell
     {
         CellType CellType { get; }
-
-        public ICellView CellView { get; }
-
+        
         public void SetData(CellIndexInGrid indexInGrid, CellType cellType,
             Vector3 position, Sprite sprite, Action<ICell> onMatch);
 
@@ -130,7 +127,6 @@ namespace Controllers
     {
         public CellIndexInGrid Id { get; private set; }
         public CellType CellType { get; private set; }
-        public ICellView CellView => _cellView;
         public Vector3? CellPosition => _cellView?.CellPosition;
 
         private ICellView _cellView;
@@ -211,9 +207,11 @@ namespace Controllers
         private Task<bool> _swapTask;
         private float _spawnYPosition;
         private float _firstColumnPosition;
+        
+        public bool IsActive => _swapTask is {};
 
         public GridInstance((int rowCount, int columnCount) gridData, IPool<ICell> cellPool,
-            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition, float firstColumnPosition)
+            SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition)
         {
             var rowCount = gridData.rowCount;
             var columnCount = gridData.columnCount;
@@ -223,7 +221,6 @@ namespace Controllers
             _cellPool = cellPool;
             _processMatch = processMatch;
             _spawnYPosition = spawnYPosition;
-            _firstColumnPosition = firstColumnPosition;
 
             _cellTypes =
                 (List<CellType>)Enum.GetValues(typeof(CellType)).ConvertTo(typeof(List<CellType>));
@@ -504,8 +501,6 @@ namespace Controllers
 
             return cell;
         }
-
-        public bool IsActive => _swapTask is {};
     }
 
     public class GridBehaviourController : ControllerBase, IGridBehaviour, ISelectCell
@@ -518,6 +513,7 @@ namespace Controllers
         private CellView _cellPrefab;
         private Vector3 _playingAreaBounds;
         private Vector3 _screenBounds;
+        private Task<bool> _selectTask;
 
         [Inject]
         void Construct(MainCamera mainCamera, IGetCellAtlas getCellAtlas,
@@ -525,8 +521,8 @@ namespace Controllers
             , IGetLevelSettings getLevelSettings)
         {
             _mainCamera = mainCamera;
-            _cellSpriteAtlas = getCellAtlas.GetCellAtlas();
-            _cellPrefab = getCell.GetCellPrefab();
+            _cellSpriteAtlas = getCellAtlas.GetCellAtlas().Load(runAsync:false).Result;
+            _cellPrefab = getCell.GetCellPrefab().Load(runAsync:false).Result;
             _processMove = processMove;
             _processMatch = processMatch;
         }
@@ -571,7 +567,7 @@ namespace Controllers
             var cellPool = new CellPool<ICell>(new CellFactory(_cellPrefab, cellScale));
             _gridInstance = new GridInstance((rowCount, columnCount), cellPool,
                 _cellSpriteAtlas, _processMatch,
-                firstColumnPosition + approximateCellDimensions, firstColumnPosition);
+                firstColumnPosition + approximateCellDimensions);
 
             for (int i = 0; i < rowCount; i++)
             {
@@ -602,8 +598,6 @@ namespace Controllers
             return (isEven ? halfCell : 0) +
                    (approximateCellDimensions * ((middleYCell - (isEven ? 1 : 0)) - index));
         }
-
-        private Task<bool> _selectTask;
 
         public async void SelectCell(CellIndexInGrid id)
         {

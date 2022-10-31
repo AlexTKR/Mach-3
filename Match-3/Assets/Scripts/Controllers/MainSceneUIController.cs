@@ -56,7 +56,7 @@ namespace Controllers
 
         [Inject]
         void Construct(UpperPanel upperPanel, PausePanel pausePanel, LoosePanel loosePanel,
-            WinPanel winPanel, IGetLevelGoal getLevelGoal, IGetCellAtlas getCellAtlas, 
+            WinPanel winPanel, IGetLevelGoalView getLevelGoalView, IGetCellAtlas getCellAtlas,
             ILoadScene loadScene)
         {
             _loadScene = loadScene;
@@ -64,8 +64,8 @@ namespace Controllers
             _pausePanel = pausePanel;
             _loosePanel = loosePanel;
             _winPanel = winPanel;
-            _levelGoalPrefab = getLevelGoal.GetLevelGoalPrefab();
-            goalAtlas = getCellAtlas.GetCellAtlas();
+            _levelGoalPrefab = getLevelGoalView.GetLevelGoalPrefab().Load(runAsync: false).Result;
+            goalAtlas = getCellAtlas.GetCellAtlas().Load(runAsync: false).Result;
         }
 
         public override Task Initialize()
