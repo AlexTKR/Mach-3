@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace Level
 {
-    public interface IGetLevel
+    public interface IGetCells
     {
-        CellType[,] GetLevel(int number);
+        CellType[,] GetCells(int number);
     }
 
     [CreateAssetMenu(menuName = "Holders/LevelHolder", fileName = "LevelHolder")]
-    public class LevelHolder : ScriptableObject, IGetLevel
+    public class LevelHolder : ScriptableObject, IGetCells
     {
         public List<LevelInstance> levels;
         
-        public CellType[,] GetLevel(int number)
+        public CellType[,] GetCells(int number)
         {
             return levels.Count < number ? null : levels[number - 1].CellTypes;
         }
