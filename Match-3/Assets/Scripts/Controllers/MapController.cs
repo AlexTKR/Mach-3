@@ -39,13 +39,14 @@ namespace Controllers
             return base.InjectDatabase(database);
         }
 
-        public void LoadMap()
+        public async void LoadMap()
         {
-            var levelData = _getLevelSettings.GetLevelSettings().LevelData;
+            var levelData = await _getLevelSettings.GetLevelSettings().Load(autoRelease:false);
+            var levelList = levelData.LevelData;
 
-            for (int i = 0; i < levelData.Count; i++)
+            for (int i = 0; i < levelList.Count; i++)
             {
-                var currentLevelData = levelData[i];
+                var currentLevelData = levelList[i];
                 var levelNumber = currentLevelData.LevelNumber;
                 _levelPanel.LoadPanel(levelNumber, levelNumber <= _lastCompletedLevelNumber.Value + 1);
             }

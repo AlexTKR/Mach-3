@@ -13,10 +13,9 @@ namespace Composition.Root
         {
             _mapController = mapController;
         }
-
-        protected override void Start()
+        
+        protected override void OnStart()
         {
-            base.Start();
             _mapController.LoadMap();
         }
     }

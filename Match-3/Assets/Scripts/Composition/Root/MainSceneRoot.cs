@@ -43,7 +43,11 @@ namespace Root
 
             if (_Initiator is { })
                 await _Initiator.InitControllers();
+            
+            OnStart();
         }
+
+        protected abstract void OnStart();
     }
 
     public class MainSceneRoot : RootBase
@@ -60,14 +64,22 @@ namespace Root
             _getEventSystem = getEventSystem;
         }
 
-        protected override void Start()
+        protected override async void Start()
         {
 #if UNITY_EDITOR
             if (FindObjectOfType<EventSystem>() is null)
-                DontDestroyOnLoad(MonoBehaviour.Instantiate(_getEventSystem.GetEventSystem()));
+            {
+                var eventSystem = await _getEventSystem.GetEventSystem().Load();
+                DontDestroyOnLoad(MonoBehaviour.Instantiate(eventSystem));
+                _getEventSystem.GetEventSystem().Release();
+            }
 #endif
 
             base.Start();
+        }
+
+        protected override void OnStart()
+        {
             _loadLevel.LoadLevel();
         }
     }
