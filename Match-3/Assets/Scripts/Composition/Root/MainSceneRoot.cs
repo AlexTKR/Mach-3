@@ -71,7 +71,6 @@ namespace Root
             {
                 var eventSystem = await _getEventSystem.GetEventSystem().Load();
                 DontDestroyOnLoad(MonoBehaviour.Instantiate(eventSystem));
-                _getEventSystem.GetEventSystem().Release();
             }
 #endif
 
