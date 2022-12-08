@@ -13,6 +13,10 @@ GameObject:
   - component: {fileID: 918611521412674644}
   - component: {fileID: 8574310054401024885}
   - component: {fileID: 2495358349953227799}
+  - component: {fileID: 1313683620003999079}
+  - component: {fileID: 2118808805760608669}
+  - component: {fileID: 281105653938146932}
+  - component: {fileID: 542301496259432988}
   m_Layer: 5
   m_Name: LevelButton
   m_TagString: Untagged
@@ -139,6 +143,68 @@ MonoBehaviour:
   _pressedScale: {x: 0.8, y: 0.8, z: 0.8}
   _normalScale: {x: 1, y: 1, z: 1}
   _duration: 0.3
+--- !u!114 &1313683620003999079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046937509163366981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewModelMethodName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.ProcessMapItemSelected
+  viewEventName: UnityEngine.UI.Button.onClick
+--- !u!114 &2118808805760608669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046937509163366981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveBoolToBoolAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.IsActive
+  viewPropertyName: UnityEngine.UI.Button.interactable
+--- !u!114 &281105653938146932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046937509163366981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveBoolToBoolAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.IsActive
+  viewPropertyName: View.BasicResizableComponent.IsActive
+--- !u!114 &542301496259432988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046937509163366981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveColorToColorAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.ItemColor
+  viewPropertyName: UnityEngine.UI.Image.color
 --- !u!1 &7802841622789990246
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,6 +216,7 @@ GameObject:
   - component: {fileID: 2149872185529105706}
   - component: {fileID: 6531695387997778894}
   - component: {fileID: 2477342487177773220}
+  - component: {fileID: 3521762157246590092}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -274,6 +341,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3521762157246590092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802841622789990246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveStringToStringAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.LevelNumberText
+  viewPropertyName: TMPro.TextMeshProUGUI.text
 --- !u!1 &8628498262362154574
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,14 +368,16 @@ GameObject:
   - component: {fileID: 6194940114198009978}
   - component: {fileID: 7685273273428585708}
   - component: {fileID: 6258588411915429577}
-  - component: {fileID: 3088807583373128309}
+  - component: {fileID: 2029331896101331296}
+  - component: {fileID: 1694143736873272803}
+  - component: {fileID: 7002273042696340921}
   m_Layer: 5
   m_Name: LeftLevelPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6194940114198009978
 RectTransform:
   m_ObjectHideFlags: 0
@@ -342,7 +427,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &3088807583373128309
+--- !u!114 &2029331896101331296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -351,12 +436,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 8628498262362154574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03eb4c9a095ede543b154e7f5625c2cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 14fbe316db38e1b48a273eac0c26fe31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelButton: {fileID: 8574310054401024885}
-  _levelImage: {fileID: 918611521412674644}
-  _levelName: {fileID: 2477342487177773220}
-  _activeColor: {r: 1, g: 1, b: 1, a: 1}
-  _inactiveColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-  _resizableComponent: {fileID: 2495358349953227799}
+  viewModelTypeName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel
+--- !u!114 &1694143736873272803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628498262362154574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557f3da3ddb455842ae5ef4e607efdbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7002273042696340921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628498262362154574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveIntToIntAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.LeftMapItemViewModel.SiblingIndex
+  viewPropertyName: Scripts.UI.Scripts.SetChildIndexComponent.SetSiblingIndex
