@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3444540132358037606}
   - component: {fileID: 5515393272279205743}
   - component: {fileID: 1438641052712671973}
+  - component: {fileID: 7720696791699572468}
   m_Layer: 5
   m_Name: 'NextButton '
   m_TagString: Untagged
@@ -139,6 +140,20 @@ MonoBehaviour:
   _pressedScale: {x: 0.8, y: 0.8, z: 0.8}
   _normalScale: {x: 1, y: 1, z: 1}
   _duration: 0.3
+--- !u!114 &7720696791699572468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940678662999472665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewModelMethodName: Scripts.ViewModel.PanelViewModels.WinPanelViewModel.ProcessContinueButtonClicked
+  viewEventName: UnityEngine.UI.Button.onClick
 --- !u!1 &1307627001540059620
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,14 +879,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8567888707525690695}
   - component: {fileID: 4544786936036591126}
-  - component: {fileID: 4119839731754571256}
+  - component: {fileID: 7812923846486203968}
   m_Layer: 5
   m_Name: WinPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8567888707525690695
 RectTransform:
   m_ObjectHideFlags: 0
@@ -901,7 +916,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6174167410020036388}
   m_CullTransparentMesh: 1
---- !u!114 &4119839731754571256
+--- !u!114 &7812923846486203968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -910,10 +925,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6174167410020036388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8db7d3fbbd1e304492729e7ede8e67f, type: 3}
+  m_Script: {fileID: 11500000, guid: 854d47d39083ab44a93960cb49a40475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _quitButton: {fileID: 5515393272279205743}
 --- !u!1 &6808230074367670073
 GameObject:
   m_ObjectHideFlags: 0

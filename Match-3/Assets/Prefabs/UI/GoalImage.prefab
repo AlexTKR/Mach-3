@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5733385729322876937}
   - component: {fileID: 5511821034580515745}
   - component: {fileID: 8013176988726389471}
-  - component: {fileID: -7403792026769646890}
+  - component: {fileID: 3452210979506262405}
+  - component: {fileID: 4682022417757198513}
   m_Layer: 5
   m_Name: GoalImage
   m_TagString: Untagged
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-7403792026769646890
+--- !u!114 &3452210979506262405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,11 +88,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 4892180878149097811}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 404af04742ed2504ab70ed13343e0899, type: 3}
+  m_Script: {fileID: 11500000, guid: 14fbe316db38e1b48a273eac0c26fe31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goalImage: {fileID: 8013176988726389471}
-  _goalCount: {fileID: 168428874314038109}
+  viewModelTypeName: Scripts.ViewModel.ElementViewModels.GoalViewViewModel
+--- !u!114 &4682022417757198513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892180878149097811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: 
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.ElementViewModels.GoalViewViewModel.Icon
+  viewPropertyName: UnityEngine.UI.Image.sprite
 --- !u!1 &6442087299313683188
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +119,7 @@ GameObject:
   - component: {fileID: 8176599979829373637}
   - component: {fileID: 6761910739195891234}
   - component: {fileID: 168428874314038109}
+  - component: {fileID: 7848083906558496731}
   m_Layer: 5
   m_Name: GoalText (TMP)
   m_TagString: Untagged
@@ -227,3 +244,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7848083906558496731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442087299313683188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveIntToStringAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.ElementViewModels.GoalViewViewModel.GoalCount
+  viewPropertyName: TMPro.TextMeshProUGUI.text

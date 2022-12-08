@@ -1,5 +1,6 @@
 using System;
-using Level;
+using Scripts.CommonBehaviours;
+using Scripts.Main.Level;
 using UnityEditor;
 using UnityEngine;
 
