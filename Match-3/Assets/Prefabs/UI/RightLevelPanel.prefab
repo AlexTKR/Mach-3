@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5624159876472373165}
   - component: {fileID: 3839845365719397564}
   - component: {fileID: 888126693748342984}
+  - component: {fileID: 2727169743554313877}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -135,6 +136,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2727169743554313877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856315725280965045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveStringToStringAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.LevelNumberText
+  viewPropertyName: TMPro.TextMeshProUGUI.text
 --- !u!1 &2722006681358327200
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,14 +163,16 @@ GameObject:
   - component: {fileID: 7460319202310054055}
   - component: {fileID: 1086492766493888136}
   - component: {fileID: 5257900037530509151}
-  - component: {fileID: 5859784691157442455}
+  - component: {fileID: 3370334879951182390}
+  - component: {fileID: 7131730808452351719}
+  - component: {fileID: 4055200043893815166}
   m_Layer: 5
   m_Name: RightLevelPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7460319202310054055
 RectTransform:
   m_ObjectHideFlags: 0
@@ -203,7 +222,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &5859784691157442455
+--- !u!114 &3370334879951182390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,15 +231,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 2722006681358327200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03eb4c9a095ede543b154e7f5625c2cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 14fbe316db38e1b48a273eac0c26fe31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelButton: {fileID: 5497655313462240819}
-  _levelImage: {fileID: 4853287727557972643}
-  _levelName: {fileID: 888126693748342984}
-  _activeColor: {r: 1, g: 1, b: 1, a: 1}
-  _inactiveColor: {r: 0.5647059, g: 0.5647059, b: 0.5647059, a: 1}
-  _resizableComponent: {fileID: 7450714854450646028}
+  viewModelTypeName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel
+--- !u!114 &7131730808452351719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722006681358327200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557f3da3ddb455842ae5ef4e607efdbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4055200043893815166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722006681358327200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveIntToIntAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.SiblingIndex
+  viewPropertyName: Scripts.UI.Scripts.SetChildIndexComponent.SetSiblingIndex
 --- !u!1 &5825385430215197429
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +276,10 @@ GameObject:
   - component: {fileID: 4853287727557972643}
   - component: {fileID: 5497655313462240819}
   - component: {fileID: 7450714854450646028}
+  - component: {fileID: 1570307600758173946}
+  - component: {fileID: 7444024593676027490}
+  - component: {fileID: 516074890220047970}
+  - component: {fileID: 1567236688165143883}
   m_Layer: 5
   m_Name: LevelButton
   m_TagString: Untagged
@@ -360,3 +406,65 @@ MonoBehaviour:
   _pressedScale: {x: 0.8, y: 0.8, z: 0.8}
   _normalScale: {x: 1, y: 1, z: 1}
   _duration: 0.3
+--- !u!114 &1570307600758173946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825385430215197429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewModelMethodName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.ProcessMapItemSelected
+  viewEventName: UnityEngine.UI.Button.onClick
+--- !u!114 &7444024593676027490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825385430215197429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveBoolToBoolAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.IsActive
+  viewPropertyName: UnityEngine.UI.Button.interactable
+--- !u!114 &516074890220047970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825385430215197429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveBoolToBoolAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.IsActive
+  viewPropertyName: View.BasicResizableComponent.IsActive
+--- !u!114 &1567236688165143883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825385430215197429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAdapterTypeName: Unity_Weld.UnityWeld.Binding.Adapters.ReactiveColorToColorAdapter
+  viewAdapterOptions: {fileID: 0}
+  viewModelPropertyName: Scripts.ViewModel.PanelViewModels.RightMapItemViewModel.ItemColor
+  viewPropertyName: UnityEngine.UI.Image.color

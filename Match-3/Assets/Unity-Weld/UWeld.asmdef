@@ -1,0 +1,16 @@
+{
+    "name": "UWeld",
+    "rootNamespace": "",
+    "references": [
+        "GUID:64cda729e57899e4891f867c24848f59"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
