@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Scripts.DI.Installers
 {
-    public class MainSceneUIInstaller : MonoInstaller
+    public class MainSceneViewModelInstaller : MonoInstaller
     {
         [SerializeField] private CanvasViewModelBase _mainCanvasViewModel;
 
@@ -19,7 +19,7 @@ namespace Scripts.DI.Installers
             for (int i = 0; i < viewModels.Length; i++)
             {
                 var viewModel = viewModels[i];
-                Container.BindInterfacesTo(viewModel.GetType()).FromInstance(viewModel).NonLazy();
+                Container.BindInterfacesTo(viewModel.GetType()).FromInstance(viewModel).AsSingle().NonLazy();
             }
         }
     }

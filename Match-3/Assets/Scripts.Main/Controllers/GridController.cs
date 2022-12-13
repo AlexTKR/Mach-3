@@ -120,6 +120,5 @@ namespace Scripts.Main.Controllers
 
             _selectTask = null;
         }
-        
     }
 }
