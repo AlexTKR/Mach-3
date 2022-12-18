@@ -14,7 +14,7 @@ using Random = System.Random;
 namespace Scripts.Main.Controllers
 {
     [Serializable]
-    public struct CellIndexInGrid : IEquatable<CellIndexInGrid>, IComparable<CellIndexInGrid>
+    public class CellIndexInGrid : IEquatable<CellIndexInGrid>, IComparable<CellIndexInGrid>
     {
         public int RowIndex;
         public int ColumnIndex;
