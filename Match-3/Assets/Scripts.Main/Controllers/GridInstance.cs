@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using Random = System.Random;
 namespace Scripts.Main.Controllers
 {
     [Serializable]
-    public struct CellIndexInGrid : IEquatable<CellIndexInGrid>, IComparable<CellIndexInGrid>
+    public class CellIndexInGrid : IEquatable<CellIndexInGrid>, IComparable<CellIndexInGrid>
     {
         public int RowIndex;
         public int ColumnIndex;
@@ -112,7 +113,7 @@ namespace Scripts.Main.Controllers
         IHighlightable, IMatch, IMoveCell
     {
         CellType CellType { get; }
-        
+
         public void SetData(CellIndexInGrid indexInGrid, CellType cellType,
             Vector3 position, Sprite sprite, Action<ICell> onMatch);
 
@@ -193,10 +194,13 @@ namespace Scripts.Main.Controllers
     {
         private Dictionary<int, Queue<CellIndexInGrid>> _rowToSpawnQueue =
             new Dictionary<int, Queue<CellIndexInGrid>>();
+
         private Dictionary<int, Task> _rowToSpawnDelayTask =
             new Dictionary<int, Task>();
+
         private Random _random =
             new Random();
+
         private IProcessMatch _processMatch;
         private ICell[,] _cells;
         private CellType[] _cellTypes;
@@ -207,8 +211,8 @@ namespace Scripts.Main.Controllers
         private Task<bool> _swapTask;
         private float _spawnYPosition;
         private float _firstColumnPosition;
-        
-        public bool IsActive => _swapTask is {};
+
+        public bool IsActive => _swapTask is { };
 
         public GridInstance((int rowCount, int columnCount) gridData, IPool<ICell> cellPool,
             SpriteAtlas cellSpriteAtlas, IProcessMatch processMatch, float spawnYPosition)
@@ -222,7 +226,7 @@ namespace Scripts.Main.Controllers
             _processMatch = processMatch;
             _spawnYPosition = spawnYPosition;
 
-            _cellTypes = ( (CellType[]) Enum.GetValues(typeof(CellType)) ).Where(type => type != CellType.Empty).ToArray();
+            _cellTypes = ((CellType[])Enum.GetValues(typeof(CellType))).Where(type => type != CellType.Empty).ToArray();
 
             for (int i = 0; i < rowCount; i++)
             {
